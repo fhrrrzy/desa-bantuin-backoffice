@@ -1,0 +1,558 @@
+# API Documentation - Desa Bantuin
+
+## Base URL
+
+```
+http://localhost:8000/api
+```
+
+## Authentication Endpoints
+
+### 1. Register User
+
+**POST** `/register`
+
+Register a new user with phone number authentication.
+
+**Request Body:**
+
+```json
+{
+    "name": "John Doe",
+    "email": "john@example.com",
+    "phone_number": "081234567890",
+    "password": "password123",
+    "password_confirmation": "password123"
+}
+```
+
+**Response (201):**
+
+```json
+{
+    "success": true,
+    "message": "Registrasi berhasil",
+    "data": {
+        "user": {
+            "id": 1,
+            "name": "John Doe",
+            "email": "john@example.com",
+            "phone_number": "081234567890",
+            "role": "warga"
+        },
+        "token": "1|abc123...",
+        "token_type": "Bearer"
+    }
+}
+```
+
+### 2. Login with Phone Number
+
+**POST** `/login`
+
+Login using phone number and password.
+
+**Request Body:**
+
+```json
+{
+    "phone_number": "081234567890",
+    "password": "password123"
+}
+```
+
+**Response (200):**
+
+```json
+{
+    "success": true,
+    "message": "Login berhasil",
+    "data": {
+        "user": {
+            "id": 1,
+            "name": "John Doe",
+            "email": "john@example.com",
+            "phone_number": "081234567890",
+            "role": "warga"
+        },
+        "token": "2|def456...",
+        "token_type": "Bearer"
+    }
+}
+```
+
+### 3. Get User Profile
+
+**GET** `/profile`
+
+Get authenticated user's profile information.
+
+**Headers:**
+
+```
+Authorization: Bearer {token}
+```
+
+**Response (200):**
+
+```json
+{
+    "success": true,
+    "message": "Data profil berhasil diambil",
+    "data": {
+        "user": {
+            "id": 1,
+            "name": "John Doe",
+            "email": "john@example.com",
+            "phone_number": "081234567890",
+            "role": "warga",
+            "avatar_url": null
+        }
+    }
+}
+```
+
+### 4. Update User Profile
+
+**PUT** `/profile`
+
+Update authenticated user's profile information.
+
+**Headers:**
+
+```
+Authorization: Bearer {token}
+```
+
+**Request Body:**
+
+```json
+{
+    "name": "John Updated",
+    "email": "john.updated@example.com",
+    "phone_number": "081234567891"
+}
+```
+
+**Response (200):**
+
+```json
+{
+    "success": true,
+    "message": "Profil berhasil diperbarui",
+    "data": {
+        "user": {
+            "id": 1,
+            "name": "John Updated",
+            "email": "john.updated@example.com",
+            "phone_number": "081234567891",
+            "role": "warga",
+            "avatar_url": null
+        }
+    }
+}
+```
+
+### 5. Change Password
+
+**POST** `/change-password`
+
+Change user's password.
+
+**Headers:**
+
+```
+Authorization: Bearer {token}
+```
+
+**Request Body:**
+
+```json
+{
+    "current_password": "password123",
+    "new_password": "newpassword123",
+    "new_password_confirmation": "newpassword123"
+}
+```
+
+**Response (200):**
+
+```json
+{
+    "success": true,
+    "message": "Kata sandi berhasil diubah. Silakan login kembali."
+}
+```
+
+### 6. Logout
+
+**POST** `/logout`
+
+Logout user and revoke all tokens.
+
+**Headers:**
+
+```
+Authorization: Bearer {token}
+```
+
+**Response (200):**
+
+```json
+{
+    "success": true,
+    "message": "Logout berhasil"
+}
+```
+
+## User Request Endpoints
+
+### 7. Get User's Requests
+
+**GET** `/requests`
+
+Get authenticated user's requests with pagination and filtering.
+
+**Headers:**
+
+```
+Authorization: Bearer {token}
+```
+
+**Query Parameters:**
+
+-   `per_page` (optional): Number of items per page (default: 10)
+-   `status` (optional): Filter by status (onprocess, accepted, rejected)
+-   `type` (optional): Filter by type (permintaan, pelaporan)
+
+**Response (200):**
+
+```json
+{
+    "success": true,
+    "message": "Data permintaan berhasil diambil",
+    "data": {
+        "requests": [
+            {
+                "id": 1,
+                "laporan_type": {
+                    "id": 1,
+                    "name": "KTP"
+                },
+                "type": "permintaan",
+                "description": "Saya ingin mengajukan pembuatan KTP baru",
+                "status": "onprocess",
+                "return_message": null,
+                "lampiran": ["lampiran/file1.pdf"],
+                "created_at": "2024-01-15T10:30:00.000000Z",
+                "updated_at": "2024-01-15T10:30:00.000000Z"
+            }
+        ],
+        "pagination": {
+            "current_page": 1,
+            "last_page": 1,
+            "per_page": 10,
+            "total": 1,
+            "from": 1,
+            "to": 1
+        }
+    }
+}
+```
+
+### 8. Get Specific Request
+
+**GET** `/requests/{id}`
+
+Get a specific request by ID (only if it belongs to the authenticated user).
+
+**Headers:**
+
+```
+Authorization: Bearer {token}
+```
+
+**Response (200):**
+
+```json
+{
+    "success": true,
+    "message": "Data permintaan berhasil diambil",
+    "data": {
+        "request": {
+            "id": 1,
+            "laporan_type": {
+                "id": 1,
+                "name": "KTP"
+            },
+            "type": "permintaan",
+            "description": "Saya ingin mengajukan pembuatan KTP baru",
+            "status": "onprocess",
+            "return_message": null,
+            "lampiran": ["lampiran/file1.pdf"],
+            "created_at": "2024-01-15T10:30:00.000000Z",
+            "updated_at": "2024-01-15T10:30:00.000000Z"
+        }
+    }
+}
+```
+
+### 9. Create New Request
+
+**POST** `/requests`
+
+Create a new user request.
+
+**Headers:**
+
+```
+Authorization: Bearer {token}
+Content-Type: multipart/form-data
+```
+
+**Request Body:**
+
+```json
+{
+    "laporan_type_id": 1,
+    "type": "permintaan",
+    "description": "Saya ingin mengajukan pembuatan KTP baru",
+    "lampiran": [file1, file2] // Optional files
+}
+```
+
+**Response (201):**
+
+```json
+{
+    "success": true,
+    "message": "Permintaan berhasil dibuat",
+    "data": {
+        "request": {
+            "id": 1,
+            "laporan_type": {
+                "id": 1,
+                "name": "KTP"
+            },
+            "type": "permintaan",
+            "description": "Saya ingin mengajukan pembuatan KTP baru",
+            "status": "onprocess",
+            "lampiran": ["lampiran/file1.pdf"],
+            "created_at": "2024-01-15T10:30:00.000000Z",
+            "updated_at": "2024-01-15T10:30:00.000000Z"
+        }
+    }
+}
+```
+
+### 10. Get Request Statistics
+
+**GET** `/requests/statistics`
+
+Get statistics for authenticated user's requests.
+
+**Headers:**
+
+```
+Authorization: Bearer {token}
+```
+
+**Response (200):**
+
+```json
+{
+    "success": true,
+    "message": "Statistik permintaan berhasil diambil",
+    "data": {
+        "statistics": {
+            "total": 5,
+            "onprocess": 2,
+            "selesai": 2,
+            "ditolak": 1,
+            "permintaan": 3,
+            "pelaporan": 2
+        }
+    }
+}
+```
+
+## Error Responses
+
+### Validation Error (422)
+
+```json
+{
+    "success": false,
+    "message": "Validasi gagal",
+    "errors": {
+        "phone_number": ["Nomor telepon wajib diisi"]
+    }
+}
+```
+
+### Authentication Error (401)
+
+```json
+{
+    "success": false,
+    "message": "Nomor telepon atau kata sandi salah"
+}
+```
+
+### Authorization Error (403)
+
+```json
+{
+    "success": false,
+    "message": "Anda tidak memiliki akses ke permintaan ini"
+}
+```
+
+### Not Found Error (404)
+
+```json
+{
+    "success": false,
+    "message": "Permintaan tidak ditemukan"
+}
+```
+
+### Server Error (500)
+
+```json
+{
+    "success": false,
+    "message": "Terjadi kesalahan saat login",
+    "error": "Error details..."
+}
+```
+
+## Usage Examples
+
+### Using cURL
+
+**Register:**
+
+```bash
+curl -X POST http://localhost:8000/api/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "John Doe",
+    "email": "john@example.com",
+    "phone_number": "081234567890",
+    "password": "password123",
+    "password_confirmation": "password123"
+  }'
+```
+
+**Login:**
+
+```bash
+curl -X POST http://localhost:8000/api/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "phone_number": "081234567890",
+    "password": "password123"
+  }'
+```
+
+**Get User's Requests:**
+
+```bash
+curl -X GET "http://localhost:8000/api/requests?status=onprocess&per_page=5" \
+  -H "Authorization: Bearer {your_token_here}"
+```
+
+**Create New Request:**
+
+```bash
+curl -X POST http://localhost:8000/api/requests \
+  -H "Authorization: Bearer {your_token_here}" \
+  -F "laporan_type_id=1" \
+  -F "type=permintaan" \
+  -F "description=Saya ingin mengajukan pembuatan KTP baru" \
+  -F "lampiran[]=@/path/to/file1.pdf" \
+  -F "lampiran[]=@/path/to/file2.jpg"
+```
+
+### Using JavaScript/Fetch
+
+**Login:**
+
+```javascript
+const response = await fetch("http://localhost:8000/api/login", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+        phone_number: "081234567890",
+        password: "password123",
+    }),
+});
+
+const data = await response.json();
+const token = data.data.token;
+
+// Store token for future requests
+localStorage.setItem("auth_token", token);
+```
+
+**Get User's Requests:**
+
+```javascript
+const token = localStorage.getItem("auth_token");
+
+const response = await fetch(
+    "http://localhost:8000/api/requests?status=onprocess",
+    {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+    }
+);
+
+const data = await response.json();
+console.log(data.data.requests);
+```
+
+**Create New Request:**
+
+```javascript
+const token = localStorage.getItem("auth_token");
+const formData = new FormData();
+
+formData.append("laporan_type_id", "1");
+formData.append("type", "permintaan");
+formData.append("description", "Saya ingin mengajukan pembuatan KTP baru");
+
+// Add files if any
+const fileInput = document.getElementById("fileInput");
+for (let file of fileInput.files) {
+    formData.append("lampiran[]", file);
+}
+
+const response = await fetch("http://localhost:8000/api/requests", {
+    method: "POST",
+    headers: {
+        Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+});
+
+const data = await response.json();
+```
+
+## Notes
+
+-   All responses follow a consistent format with `success`, `message`, and `data` fields
+-   Phone number authentication is the primary login method
+-   Tokens are automatically revoked on logout and password change
+-   All protected routes require the `Authorization: Bearer {token}` header
+-   Users are automatically assigned the "warga" role upon registration
+-   Users can only access their own request data
+-   File uploads are supported for request attachments (max 5MB per file)
+-   Pagination is available for request listing
+-   Filtering by status and type is supported

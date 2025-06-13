@@ -9,6 +9,7 @@ use Filament\Resources\Pages\ListRecords;
 use Filament\Resources\Components\Tab;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class ListUserRequests extends ListRecords
 {
@@ -16,9 +17,14 @@ class ListUserRequests extends ListRecords
 
     protected function getHeaderActions(): array
     {
-        return [
-            Actions\CreateAction::make(),
-        ];
+        // Only show create action for warga users
+        if (Auth::user()->role === 'warga') {
+            return [
+                Actions\CreateAction::make(),
+            ];
+        }
+
+        return [];
     }
 
     public function getTabs(): array

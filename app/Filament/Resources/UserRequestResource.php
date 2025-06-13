@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserRequestResource\Pages;
 use App\Filament\Resources\UserRequestResource\RelationManagers;
+use App\Models\User;
 use App\Models\UserRequest;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -12,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class UserRequestResource extends Resource
 {
@@ -19,6 +21,12 @@ class UserRequestResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $label = 'Permintaan & Permohonan';
+
+    public static function canCreate(): bool
+    {
+        // Only warga can create requests, admin cannot
+        return Auth::user()->role === 'warga';
+    }
 
     public static function getNavigationBadge(): ?string
     {
@@ -169,13 +177,15 @@ class UserRequestResource extends Resource
             ->emptyStateIcon('heroicon-o-document-text')
             ->emptyStateHeading('Belum ada permintaan')
             ->emptyStateDescription('Belum ada permintaan atau pelaporan yang dibuat. Mulai dengan membuat permintaan baru.')
-            ->emptyStateActions([
-                Tables\Actions\Action::make('create')
-                    ->label('Buat Permintaan')
-                    ->url(route('filament.admin.resources.user-requests.create'))
-                    ->icon('heroicon-m-plus')
-                    ->button(),
-            ]);
+            ->emptyStateActions(
+                Auth::user()->role === 'warga' ? [
+                    Tables\Actions\Action::make('create')
+                        ->label('Buat Permintaan')
+                        ->url(route('filament.admin.resources.user-requests.create'))
+                        ->icon('heroicon-m-plus')
+                        ->button(),
+                ] : []
+            );
     }
 
     public static function getRelations(): array

@@ -57,4 +57,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserRequest::class);
     }
+
+    /**
+     * Check if the user is an admin.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    /**
+     * Check if the user is a warga.
+     */
+    public function isWarga(): bool
+    {
+        return $this->role === 'warga';
+    }
 }

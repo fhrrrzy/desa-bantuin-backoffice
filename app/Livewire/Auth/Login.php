@@ -2,69 +2,60 @@
 
 namespace App\Livewire\Auth;
 
-use Filament\Facades\Filament;
-use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Form;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Component;
+use Filament\Pages\Auth\Login as BaseAuth;
 use Illuminate\Validation\ValidationException;
-use Filament\Pages\Auth\Login as BaseLogin;
-use Filament\Http\Responses\Auth\Contracts\LoginResponse;
-use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 
-class Login extends BaseLogin
+class Login extends BaseAuth
 {
-    public $phone_number = ''; // Change email to phone_number
-
-    protected function getFormSchema(): array
+    public function form(Form $form): Form
     {
+        return $form
+            ->schema([
+                $this->getLoginFormComponent(),
+                $this->getPasswordFormComponent(),
+                $this->getRememberFormComponent(),
+            ])
+            ->statePath('data');
+    }
+
+    protected function getLoginFormComponent(): Component
+    {
+        return TextInput::make('login')
+            ->label('Phone Number or Email')
+            ->required()
+            ->autocomplete()
+            ->autofocus()
+            ->extraInputAttributes(['tabindex' => 1])
+            ->rules([
+                'required',
+                'string',
+                'min:3',
+                'max:255',
+            ])
+            ->validationMessages([
+                'required' => 'Phone number or email is required.',
+                'min' => 'Phone number or email must be at least 3 characters.',
+                'max' => 'Phone number or email cannot exceed 255 characters.',
+            ]);
+    }
+
+    protected function getCredentialsFromFormData(array $data): array
+    {
+        $login_type = filter_var($data['login'], FILTER_VALIDATE_EMAIL) ? 'email' : 'phone_number';
+
         return [
-            TextInput::make('phone_number') // Use phone_number
-                ->label(__('Phone Number')) // Customize label
-                ->required()
-                ->autocomplete('tel'), // Hint for phone number input
-            TextInput::make('password')
-                ->label(__('filament-panels::pages/auth/login.fields.password.label'))
-                ->password()
-                ->required(),
-            Checkbox::make('remember')
-                ->label(__('filament-panels::pages/auth/login.fields.remember.label')),
+            $login_type => $data['login'],
+            'password'  => $data['password'],
         ];
     }
 
-    public function authenticate(): ?LoginResponse
-    {
-        try {
-            $this->rateLimit(5);
-        } catch (TooManyRequestsException $exception) {
-            throw ValidationException::withMessages([
-                'phone_number' => __('filament-panels::pages/auth/login.messages.throttled', [
-                    'seconds' => $exception->secondsUntilAvailable,
-                    'minutes' => ceil($exception->secondsUntilAvailable / 60),
-                ]),
-            ]);
-        }
-
-        $data = $this->form->getState();
-
-        // Attempt to authenticate with phone_number instead of email
-        if (! Filament::auth()->attempt([
-            'phone_number' => $data['phone_number'],
-            'password' => $data['password'],
-        ], $data['remember'])) {
-            throw ValidationException::withMessages([
-                'phone_number' => __('filament-panels::pages/auth/login.messages.failed'),
-            ]);
-        }
-
-        session()->regenerate();
-
-        return app(LoginResponse::class);
-    }
-
-    // You might also need to override throwFailureValidationException if you want to customize the error message location
     protected function throwFailureValidationException(): never
     {
         throw ValidationException::withMessages([
-            'data.phone_number' => __('filament-panels::pages/auth/login.messages.failed'),
+            'data.login' => __('filament-panels::pages/auth/login.messages.failed'),
         ]);
     }
 }

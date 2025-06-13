@@ -86,8 +86,7 @@ class UserRequestResource extends Resource
                     ->required()
                     ->prefixIcon('heroicon-o-clock'),
                 Forms\Components\Textarea::make('return_message')
-                    ->columnSpanFull()
-                    ->prefixIcon('heroicon-o-reply'),
+                    ->columnSpanFull(),
                 Forms\Components\FileUpload::make('lampiran')
                     ->label('Lampiran')
                     ->multiple()
@@ -96,7 +95,6 @@ class UserRequestResource extends Resource
                     ->maxFiles(5)
                     ->maxSize(5120) // 5MB per file
                     ->columnSpanFull()
-                    ->prefixIcon('heroicon-o-paper-clip'),
             ]);
     }
 
@@ -167,7 +165,7 @@ class UserRequestResource extends Resource
                     ->native(false)
             ], layout: Tables\Enums\FiltersLayout::AboveContent)
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -200,6 +198,7 @@ class UserRequestResource extends Resource
         return [
             'index' => Pages\ListUserRequests::route('/'),
             'create' => Pages\CreateUserRequest::route('/create'),
+            'view' => Pages\ViewUserRequest::route('/{record}'),
             'edit' => Pages\EditUserRequest::route('/{record}/edit'),
         ];
     }

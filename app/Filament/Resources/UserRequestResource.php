@@ -18,6 +18,17 @@ class UserRequestResource extends Resource
     protected static ?string $model = UserRequest::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $label = 'Permintaan & Permohonan';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getEloquentQuery()->where('status', 'onprocess')->count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'warning';
+    }
 
     public static function form(Form $form): Form
     {
@@ -25,19 +36,59 @@ class UserRequestResource extends Resource
             ->schema([
                 Forms\Components\Select::make('user_id')
                     ->relationship('user', 'name')
-                    ->required(),
+                    ->required()
+                    ->prefixIcon('heroicon-o-user'),
                 Forms\Components\Select::make('laporan_type_id')
                     ->relationship('laporanType', 'name')
-                    ->required(),
-                Forms\Components\TextInput::make('type')
-                    ->required(),
-                Forms\Components\Textarea::make('description')
                     ->required()
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('status')
-                    ->required(),
+                    ->prefixIcon('heroicon-o-document-text'),
+                Forms\Components\Select::make('type')
+                    ->options([
+                        'permintaan' => 'Permintaan',
+                        'pelaporan' => 'Pelaporan',
+                    ])
+                    ->required()
+                    ->prefixIcon('heroicon-o-clipboard-document-list'),
+                Forms\Components\RichEditor::make('description')
+                    ->label('Deskripsi')
+                    ->required()
+                    ->columnSpanFull()
+                    ->toolbarButtons([
+                        'bold',
+                        'italic',
+                        'underline',
+                        'strike',
+                        'link',
+                        'bulletList',
+                        'orderedList',
+                        'h2',
+                        'h3',
+                        'blockquote',
+                        'codeBlock',
+                    ])
+                    ->fileAttachmentsDisk('public')
+                    ->fileAttachmentsDirectory('attachments')
+                    ->fileAttachmentsVisibility('public'),
+                Forms\Components\Select::make('status')
+                    ->options([
+                        'onprocess' => 'Sedang Diproses',
+                        'accepted' => 'Diterima',
+                        'rejected' => 'Ditolak',
+                    ])
+                    ->required()
+                    ->prefixIcon('heroicon-o-clock'),
                 Forms\Components\Textarea::make('return_message')
-                    ->columnSpanFull(),
+                    ->columnSpanFull()
+                    ->prefixIcon('heroicon-o-reply'),
+                Forms\Components\FileUpload::make('lampiran')
+                    ->label('Lampiran')
+                    ->multiple()
+                    ->directory('lampiran')
+                    ->acceptedFileTypes(['image/*', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'])
+                    ->maxFiles(5)
+                    ->maxSize(5120) // 5MB per file
+                    ->columnSpanFull()
+                    ->prefixIcon('heroicon-o-paper-clip'),
             ]);
     }
 
@@ -46,25 +97,67 @@ class UserRequestResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
-                    ->numeric()
-                    ->sortable(),
+                    ->label('Nama Pengguna')
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('laporanType.name')
-                    ->numeric()
+                    ->label('Jenis Laporan')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('type'),
-                Tables\Columns\TextColumn::make('status'),
+                Tables\Columns\TextColumn::make('type')
+                    ->label('Tipe')
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        'permintaan' => 'info',
+                        'pelaporan' => 'success',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn($state) => ucwords($state)),
+                Tables\Columns\TextColumn::make('status')
+                    ->label('Status')
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        'onprocess' => 'warning',
+                        'accepted' => 'success',
+                        'rejected' => 'danger',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn($state) => match ($state) {
+                        'onprocess' => 'Sedang Diproses',
+                        'accepted' => 'Diterima',
+                        'rejected' => 'Ditolak',
+                        default => $state,
+                    }),
+                Tables\Columns\TextColumn::make('lampiran')
+                    ->label('Lampiran')
+                    ->formatStateUsing(fn($state) => $state ? count($state) . ' file(s)' : 'Tidak ada')
+                    ->badge()
+                    ->color(fn($state) => $state ? 'info' : 'gray'),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Dibuat Pada')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Diperbarui Pada')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
-            ])
+                Tables\Filters\SelectFilter::make('laporan_type_id')
+                    ->label('Jenis Laporan')
+                    ->relationship('laporanType', 'name')
+                    ->native(false)
+                    ->preload()
+                    ->multiple(),
+                Tables\Filters\SelectFilter::make('type')
+                    ->label('Tipe')
+                    ->options([
+                        'permintaan' => 'Permintaan',
+                        'pelaporan' => 'Pelaporan',
+                    ])
+                    ->native(false)
+            ], layout: Tables\Enums\FiltersLayout::AboveContent)
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
@@ -72,6 +165,16 @@ class UserRequestResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ])
+            ->emptyStateIcon('heroicon-o-document-text')
+            ->emptyStateHeading('Belum ada permintaan')
+            ->emptyStateDescription('Belum ada permintaan atau pelaporan yang dibuat. Mulai dengan membuat permintaan baru.')
+            ->emptyStateActions([
+                Tables\Actions\Action::make('create')
+                    ->label('Buat Permintaan')
+                    ->url(route('filament.admin.resources.user-requests.create'))
+                    ->icon('heroicon-m-plus')
+                    ->button(),
             ]);
     }
 

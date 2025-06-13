@@ -56,6 +56,13 @@ class UserResource extends Resource
                     ->prefixIcon('heroicon-o-envelope')
                     ->columnSpan(1),
 
+                Forms\Components\TextInput::make('phone_number')
+                    ->label('Nomor Telepon')
+                    ->tel()
+                    ->maxLength(20)
+                    ->prefixIcon('heroicon-o-phone')
+                    ->columnSpan(1),
+
                 Forms\Components\Select::make('role')
                     ->label('Peran')
                     ->prefixIcon('heroicon-o-hand-raised')
@@ -101,6 +108,12 @@ class UserResource extends Resource
                     ->label('Email')
                     ->sortable()
                     ->searchable(),
+
+                Tables\Columns\TextColumn::make('phone_number')
+                    ->label('Nomor Telepon')
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(),
 
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nama')

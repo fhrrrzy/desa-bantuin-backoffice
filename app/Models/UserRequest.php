@@ -29,6 +29,16 @@ class UserRequest extends Model
         'description',
         'status',
         'return_message',
+        'lampiran',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'lampiran' => 'array',
     ];
 
     /**

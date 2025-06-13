@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('avatar_url')->nullable()->after('password');
-            $table->enum('role', ['warga', 'admin'])->default('warga')->after('avatar_url');
+        Schema::create('laporan_types', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
         });
     }
 
@@ -22,8 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['avatar_url', 'role']);
-        });
+        Schema::dropIfExists('laporan_types');
     }
 };

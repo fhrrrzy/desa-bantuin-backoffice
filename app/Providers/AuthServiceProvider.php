@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Models\UserRequest;
 use App\Policies\UserRequestPolicy;
+use App\Models\LaporanType;
+use App\Policies\LaporanTypePolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -15,6 +17,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         UserRequest::class => UserRequestPolicy::class,
+        LaporanType::class => LaporanTypePolicy::class,
     ];
 
     /**

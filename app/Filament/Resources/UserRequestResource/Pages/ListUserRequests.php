@@ -41,7 +41,7 @@ class ListUserRequests extends ListRecords
                 ->modifyQueryUsing(fn(Builder $query) => $query->where('status', 'onprocess'))
                 ->badgeColor('warning'),
 
-            'accepted' => Tab::make('Diterima')
+            'accepted' => Tab::make('Selesai')
                 ->icon('heroicon-o-check-circle')
                 ->badge(UserRequestResource::getEloquentQuery()->where('status', 'accepted')->count())
                 ->modifyQueryUsing(fn(Builder $query) => $query->where('status', 'accepted'))

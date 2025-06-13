@@ -19,8 +19,12 @@ class UserRequestResource extends Resource
 {
     protected static ?string $model = UserRequest::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?string $label = 'Permintaan & Permohonan';
+    protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
+    protected static ?string $navigationLabel = 'Permintaan & Permohonan';
+    protected static ?string $modelLabel = 'Permintaan';
+    protected static ?string $pluralModelLabel = 'Permintaan & Permohonan';
+    protected static ?string $navigationGroup = 'Layanan Desa';
+    protected static ?int $navigationSort = 1;
 
     public static function canCreate(): bool
     {
@@ -80,7 +84,7 @@ class UserRequestResource extends Resource
                 Forms\Components\Select::make('status')
                     ->options([
                         'onprocess' => 'Sedang Diproses',
-                        'accepted' => 'Diterima',
+                        'accepted' => 'Selesai',
                         'rejected' => 'Ditolak',
                     ])
                     ->required()
@@ -129,7 +133,7 @@ class UserRequestResource extends Resource
                     })
                     ->formatStateUsing(fn($state) => match ($state) {
                         'onprocess' => 'Sedang Diproses',
-                        'accepted' => 'Diterima',
+                        'accepted' => 'Selesai',
                         'rejected' => 'Ditolak',
                         default => $state,
                     }),

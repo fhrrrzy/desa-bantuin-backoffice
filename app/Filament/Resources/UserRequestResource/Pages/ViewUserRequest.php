@@ -115,8 +115,8 @@ class ViewUserRequest extends ViewRecord
 
         // Only show Terima and Tolak actions if status is 'onprocess'
         if ($this->record->status === 'onprocess') {
-            $actions[] = Actions\Action::make('terima')
-                ->label('Terima')
+            $actions[] = Actions\Action::make('selesai')
+                ->label('Selesai')
                 ->icon('heroicon-o-check-circle')
                 ->color('success')
                 ->form([
@@ -132,7 +132,7 @@ class ViewUserRequest extends ViewRecord
                         'return_message' => $data['return_message'] ?? null,
                     ]);
 
-                    $this->notify('success', 'Permintaan berhasil diterima.');
+                    $this->notify('success', 'Permintaan berhasil diselesaikan.');
                 });
 
             $actions[] = Actions\Action::make('tolak')

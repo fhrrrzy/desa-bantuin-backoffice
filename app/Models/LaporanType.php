@@ -26,4 +26,12 @@ class LaporanType extends Model
     {
         return $this->hasMany(UserRequest::class);
     }
+
+    /**
+     * Get the information for this laporan type.
+     */
+    public function information(): HasMany
+    {
+        return $this->hasMany(Information::class);
+    }
 }

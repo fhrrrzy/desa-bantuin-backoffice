@@ -184,7 +184,39 @@ Authorization: Bearer {token}
 }
 ```
 
-### 6. Logout
+### 6. Refresh Token
+
+**POST** `/refresh`
+
+Refresh the current access token.
+
+**Headers:**
+
+```
+Authorization: Bearer {token}
+```
+
+**Response (200):**
+
+```json
+{
+    "success": true,
+    "message": "Token berhasil diperbarui",
+    "data": {
+        "user": {
+            "id": 1,
+            "name": "John Doe",
+            "email": "john@example.com",
+            "phone_number": "081234567890",
+            "role": "warga"
+        },
+        "token": "3|ghi789...",
+        "token_type": "Bearer"
+    }
+}
+```
+
+### 7. Logout
 
 **POST** `/logout`
 
@@ -207,7 +239,7 @@ Authorization: Bearer {token}
 
 ## User Request Endpoints
 
-### 7. Get User's Requests
+### 8. Get User's Requests
 
 **GET** `/requests`
 
@@ -260,7 +292,7 @@ Authorization: Bearer {token}
 }
 ```
 
-### 8. Get Specific Request
+### 9. Get Specific Request
 
 **GET** `/requests/{id}`
 
@@ -297,7 +329,7 @@ Authorization: Bearer {token}
 }
 ```
 
-### 9. Create New Request
+### 10. Create New Request
 
 **POST** `/requests`
 
@@ -345,7 +377,7 @@ Content-Type: multipart/form-data
 }
 ```
 
-### 10. Get Request Statistics
+### 11. Get Request Statistics
 
 **GET** `/requests/statistics`
 
@@ -475,6 +507,20 @@ curl -X POST http://localhost:8000/api/requests \
   -F "lampiran[]=@/path/to/file2.jpg"
 ```
 
+**Get Profile (with token):**
+
+```bash
+curl -X GET http://localhost:8000/api/profile \
+  -H "Authorization: Bearer {your_token_here}"
+```
+
+**Refresh Token:**
+
+```bash
+curl -X POST http://localhost:8000/api/refresh \
+  -H "Authorization: Bearer {your_token_here}"
+```
+
 ### Using JavaScript/Fetch
 
 **Login:**
@@ -543,6 +589,28 @@ const response = await fetch("http://localhost:8000/api/requests", {
 });
 
 const data = await response.json();
+```
+
+**Refresh Token:**
+
+```javascript
+const token = localStorage.getItem("auth_token");
+
+const response = await fetch("http://localhost:8000/api/refresh", {
+    method: "POST",
+    headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+    },
+});
+
+const data = await response.json();
+
+if (data.success) {
+    // Update stored token with new one
+    localStorage.setItem("auth_token", data.data.token);
+    console.log("Token refreshed successfully");
+}
 ```
 
 ## Notes

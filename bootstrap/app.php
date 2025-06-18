@@ -15,6 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'user.owns.request' => \App\Http\Middleware\EnsureUserOwnsRequest::class,
         ]);
+
+        // Configure trusted proxies
+        $middleware->trustProxies('*');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

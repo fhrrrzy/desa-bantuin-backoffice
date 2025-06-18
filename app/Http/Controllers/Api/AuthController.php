@@ -277,6 +277,51 @@ class AuthController extends Controller
     }
 
     /**
+     * Refresh user token
+     */
+    public function refresh(Request $request): JsonResponse
+    {
+        try {
+            $user = $request->user();
+
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Token tidak valid'
+                ], 401);
+            }
+
+            // Revoke current token
+            $request->user()->currentAccessToken()->delete();
+
+            // Create new token
+            $token = $user->createToken('auth_token')->plainTextToken;
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Token berhasil diperbarui',
+                'data' => [
+                    'user' => [
+                        'id' => $user->id,
+                        'name' => $user->name,
+                        'email' => $user->email,
+                        'phone_number' => $user->phone_number,
+                        'role' => $user->role,
+                    ],
+                    'token' => $token,
+                    'token_type' => 'Bearer',
+                ]
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat memperbarui token',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
      * Logout user
      */
     public function logout(Request $request): JsonResponse

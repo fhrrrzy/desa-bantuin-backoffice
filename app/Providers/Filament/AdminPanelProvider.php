@@ -41,7 +41,7 @@ class AdminPanelProvider extends PanelProvider
                 \App\Filament\Widgets\UserRequestChartWidget::class,
                 \App\Filament\Widgets\RequestTypeChartWidget::class,
                 \App\Filament\Widgets\LaporanTypeDistributionWidget::class,
-                \App\Filament\Widgets\UserRequestStatsWidget::class,
+                \App\Filament\Widgets\UserRequestStatsWidget::class,    
                 \App\Filament\Widgets\RecentOnProcessRequestsWidget::class,
             ])
             ->middleware([

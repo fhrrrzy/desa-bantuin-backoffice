@@ -17,14 +17,10 @@ class ListUserRequests extends ListRecords
 
     protected function getHeaderActions(): array
     {
-        // Only show create action for warga users
-        if (Auth::user()->role === 'warga') {
-            return [
-                Actions\CreateAction::make(),
-            ];
-        }
 
-        return [];
+        return [
+            Actions\CreateAction::make()->slideOver(),    
+        ];
     }
 
     public function getTabs(): array

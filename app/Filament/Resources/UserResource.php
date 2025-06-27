@@ -14,6 +14,7 @@ use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\UserResource\Pages;
 use Filament\Tables\Actions\ActionGroup;
+use Rmsramos\Activitylog\Actions\ActivityLogTimelineTableAction;
 
 class UserResource extends Resource
 {
@@ -202,7 +203,10 @@ class UserResource extends Resource
                                 ->body("Kata sandi untuk pengguna {$record->name} telah diubah oleh admin: {$admin->name}.")
                                 ->send();
                         }),
-                ])
+                    ActivityLogTimelineTableAction::make('Aktivitas')
+
+                    ->modalWidth('md'),
+            ])
                     ->label('Aksi')
                     ->button()
                     ->color('gray')

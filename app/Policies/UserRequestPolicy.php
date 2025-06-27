@@ -37,7 +37,7 @@ class UserRequestPolicy
     public function create(User $user): bool
     {
         // Only warga can create requests, admin cannot
-        return $user->isWarga();
+        return true;
     }
 
     /**

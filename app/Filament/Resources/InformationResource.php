@@ -14,6 +14,7 @@ use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Database\Eloquent\Model;
 
 class InformationResource extends Resource
 {
@@ -125,6 +126,25 @@ class InformationResource extends Resource
             'index' => Pages\ListInformation::route('/'),
             // 'create' => Pages\CreateInformation::route('/create'),
             // 'edit' => Pages\EditInformation::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getGlobalSearchResultTitle(Model $record): string
+    {
+        return "{$record->title} - {$record->laporanType->name}";
+    }
+
+    public static function getGlobalSearchEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with('laporanType')->select('id', 'title', 'laporan_type_id');
+    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return [
+            'title',
+            'description',
+            'laporanType.name',
         ];
     }
 }

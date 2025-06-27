@@ -2,18 +2,21 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserRequestResource\Pages;
-use App\Filament\Resources\UserRequestResource\RelationManagers;
-use App\Models\User;
-use App\Models\UserRequest;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\User;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\UserRequest;
+use Filament\Resources\Resource;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Facades\Auth;
+use App\Filament\Resources\UserRequestResource\Pages;
+use App\Filament\Resources\UserRequestResource\RelationManagers;
+use Rmsramos\Activitylog\Actions\ActivityLogTimelineTableAction;
 
 class UserRequestResource extends Resource
 {
@@ -28,8 +31,8 @@ class UserRequestResource extends Resource
 
     public static function canCreate(): bool
     {
-        // Only warga can create requests, admin cannot
-        return Auth::user()->role === 'warga';
+        // Both admin and warga can create requests
+        return true;
     }
 
     public static function getNavigationBadge(): ?string
@@ -39,28 +42,63 @@ class UserRequestResource extends Resource
 
     public static function getNavigationBadgeColor(): ?string
     {
-        return 'warning';
+        return 'primary';
+    }
+
+    public static function getGlobalSearchResultTitle(Model $record): string
+    {
+        return "{$record->user->name} - {$record->type} ({$record->status})";
+    }
+
+    public static function getGlobalSearchEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['user', 'laporanType'])->select('id', 'user_id', 'type', 'status', 'description');
+    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return [
+            'user.name',
+            'laporanType.name', 
+            'type',
+            'status',
+            'description',
+        ];
     }
 
     public static function form(Form $form): Form
     {
+        $isAdmin = Auth::user()->role === 'admin';
+        
         return $form
             ->schema([
+                // Only show user selection for admin users
                 Forms\Components\Select::make('user_id')
-                    ->relationship('user', 'name')
+                    ->label('Pilih Pengguna')
+                    ->relationship('user', 'name', modifyQueryUsing: fn (Builder $query) => $query->where('role', 'warga'))
                     ->required()
-                    ->prefixIcon('heroicon-o-user'),
+                    ->prefixIcon('heroicon-o-user')
+                    ->searchable()
+                    ->preload(),
+                
                 Forms\Components\Select::make('laporan_type_id')
+                    ->label('Jenis Laporan')
                     ->relationship('laporanType', 'name')
                     ->required()
-                    ->prefixIcon('heroicon-o-document-text'),
+                    ->prefixIcon('heroicon-o-document-text')
+                    ->searchable()
+                    ->preload(),
+                    
                 Forms\Components\Select::make('type')
+                    ->label('Tipe')
                     ->options([
                         'permintaan' => 'Permintaan',
                         'pelaporan' => 'Pelaporan',
                     ])
                     ->required()
-                    ->prefixIcon('heroicon-o-clipboard-document-list'),
+                    ->prefixIcon('heroicon-o-clipboard-document-list')
+                    ->native(false),
+                    
                 Forms\Components\RichEditor::make('description')
                     ->label('Deskripsi')
                     ->required()
@@ -81,17 +119,9 @@ class UserRequestResource extends Resource
                     ->fileAttachmentsDisk('public')
                     ->fileAttachmentsDirectory('attachments')
                     ->fileAttachmentsVisibility('public'),
-                Forms\Components\Select::make('status')
-                    ->options([
-                        'onprocess' => 'Sedang Diproses',
-                        'accepted' => 'Selesai',
-                        'rejected' => 'Ditolak',
-                    ])
-                    ->required()
-                    ->prefixIcon('heroicon-o-clock'),
-                Forms\Components\Textarea::make('return_message')
-                    ->label('Pesan Balasan')
-                    ->columnSpanFull(),
+                    
+                    
+                    
                 Forms\Components\FileUpload::make('lampiran')
                     ->label('Lampiran')
                     ->multiple()
@@ -100,6 +130,7 @@ class UserRequestResource extends Resource
                     ->maxFiles(5)
                     ->maxSize(5120) // 5MB per file
                     ->columnSpanFull()
+                    
             ]);
     }
 
@@ -116,16 +147,25 @@ class UserRequestResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('type')
                     ->label('Tipe')
-                    ->badge()
                     ->color(fn(string $state): string => match ($state) {
                         'permintaan' => 'info',
                         'pelaporan' => 'success',
                         default => 'gray',
                     })
                     ->formatStateUsing(fn($state) => ucwords($state)),
+
+                Tables\Columns\TextColumn::make('description')
+                    ->label('Deskripsi')
+                    ->limit(50),
                 Tables\Columns\TextColumn::make('status')
                     ->label('Status')
                     ->badge()
+                    ->icon(fn(string $state): string => match ($state) {
+                        'onprocess' => 'heroicon-o-clock',
+                        'accepted' => 'heroicon-o-check-circle',
+                        'rejected' => 'heroicon-o-x-circle',
+                        default => 'heroicon-o-question-mark-circle',
+                    })
                     ->color(fn(string $state): string => match ($state) {
                         'onprocess' => 'warning',
                         'accepted' => 'success',
@@ -138,11 +178,6 @@ class UserRequestResource extends Resource
                         'rejected' => 'Ditolak',
                         default => $state,
                     }),
-                Tables\Columns\TextColumn::make('lampiran')
-                    ->label('Lampiran')
-                    ->formatStateUsing(fn($state) => $state ? count($state) . ' file' : 'Tidak ada')
-                    ->badge()
-                    ->color(fn($state) => $state ? 'info' : 'gray'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Dibuat Pada')
                     ->dateTime()
@@ -170,7 +205,13 @@ class UserRequestResource extends Resource
                     ->native(false)
             ], layout: Tables\Enums\FiltersLayout::AboveContent)
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    ActivityLogTimelineTableAction::make('Aktivitas')
+                ])->label('Aksi')
+                    ->button()
+                    ->color('gray')
+                    ->outlined()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -202,9 +243,17 @@ class UserRequestResource extends Resource
     {
         return [
             'index' => Pages\ListUserRequests::route('/'),
-            'create' => Pages\CreateUserRequest::route('/create'),
+            // 'create' => Pages\CreateUserRequest::route('/create'),
             'view' => Pages\ViewUserRequest::route('/{record}'),
-            'edit' => Pages\EditUserRequest::route('/{record}/edit'),
+            // 'edit' => Pages\EditUserRequest::route('/{record}/edit'),
         ];
+    }
+
+    public static function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data['status'] = 'onprocess';
+        $data['return_message'] = null;
+        
+        return $data;
     }
 }

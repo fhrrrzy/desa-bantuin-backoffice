@@ -61,7 +61,19 @@ class InformationController extends Controller
                 'title' => 'required|string|max:255',
                 'description' => 'required|string',
                 'laporan_type_id' => 'required|exists:laporan_types,id',
+                'attachment.*' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:10240', // 10MB max
             ]);
+
+            $attachmentPaths = [];
+            
+            if ($request->hasFile('attachment')) {
+                foreach ($request->file('attachment') as $file) {
+                    $path = $file->store('information-attachments', 'public');
+                    $attachmentPaths[] = $path;
+                }
+            }
+
+            $validated['attachment'] = $attachmentPaths;
 
             $information = Information::create($validated);
 
@@ -115,7 +127,19 @@ class InformationController extends Controller
                 'title' => 'sometimes|required|string|max:255',
                 'description' => 'sometimes|required|string',
                 'laporan_type_id' => 'sometimes|required|exists:laporan_types,id',
+                'attachment.*' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:10240', // 10MB max
             ]);
+
+            if ($request->hasFile('attachment')) {
+                $attachmentPaths = [];
+                
+                foreach ($request->file('attachment') as $file) {
+                    $path = $file->store('information-attachments', 'public');
+                    $attachmentPaths[] = $path;
+                }
+                
+                $validated['attachment'] = $attachmentPaths;
+            }
 
             $information->update($validated);
 

@@ -14,6 +14,17 @@ class InformationResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $attachments = [];
+        if ($this->attachment && is_array($this->attachment)) {
+            foreach ($this->attachment as $attachment) {
+                $attachments[] = [
+                    'filename' => basename($attachment),
+                    'url' => asset('storage/' . $attachment),
+                    'path' => $attachment,
+                ];
+            }
+        }
+
         return [
             'id' => $this->id,
             'title' => $this->title,
@@ -22,6 +33,7 @@ class InformationResource extends JsonResource
                 'id' => $this->laporanType->id,
                 'name' => $this->laporanType->name,
             ],
+            'attachment' => $attachments,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

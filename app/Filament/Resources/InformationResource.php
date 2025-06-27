@@ -53,6 +53,15 @@ class InformationResource extends Resource
                     ->label('Deskripsi')
                     ->required()
                     ->columnSpanFull(),
+
+                Forms\Components\FileUpload::make('attachment')
+                    ->label('Lampiran')
+                    ->multiple()
+                    ->acceptedFileTypes(['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/*'])
+                    ->maxFiles(5)
+                    ->maxSize(10240) // 10MB
+                    ->directory('information-attachments')
+                    ->columnSpanFull(),
             ]);
     }
 

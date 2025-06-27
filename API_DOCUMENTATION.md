@@ -408,6 +408,238 @@ Authorization: Bearer {token}
 }
 ```
 
+## Information Endpoints
+
+### 12. Get All Information
+
+**GET** `/information`
+
+Get all information with pagination and filtering.
+
+**Query Parameters:**
+
+-   `per_page` (optional): Number of items per page (default: 10)
+-   `laporan_type_id` (optional): Filter by laporan type ID
+-   `search` (optional): Search by title
+
+**Response (200):**
+
+```json
+{
+    "success": true,
+    "message": "Information retrieved successfully",
+    "data": [
+        {
+            "id": 1,
+            "title": "Cara Membuat KTP",
+            "description": "Panduan lengkap untuk membuat KTP baru",
+            "laporan_type": {
+                "id": 1,
+                "name": "KTP"
+            },
+            "attachment": [
+                {
+                    "filename": "template-ktp.pdf",
+                    "url": "http://localhost:8000/storage/information-attachments/template-ktp.pdf",
+                    "path": "information-attachments/template-ktp.pdf"
+                }
+            ],
+            "created_at": "2024-01-15T10:30:00.000000Z",
+            "updated_at": "2024-01-15T10:30:00.000000Z"
+        }
+    ],
+    "pagination": {
+        "current_page": 1,
+        "last_page": 1,
+        "per_page": 10,
+        "total": 1
+    }
+}
+```
+
+### 13. Get Specific Information
+
+**GET** `/information/{id}`
+
+Get a specific information by ID.
+
+**Response (200):**
+
+```json
+{
+    "success": true,
+    "message": "Information retrieved successfully",
+    "data": {
+        "id": 1,
+        "title": "Cara Membuat KTP",
+        "description": "Panduan lengkap untuk membuat KTP baru",
+        "laporan_type": {
+            "id": 1,
+            "name": "KTP"
+        },
+        "attachment": [
+            {
+                "filename": "template-ktp.pdf",
+                "url": "http://localhost:8000/storage/information-attachments/template-ktp.pdf",
+                "path": "information-attachments/template-ktp.pdf"
+            }
+        ],
+        "created_at": "2024-01-15T10:30:00.000000Z",
+        "updated_at": "2024-01-15T10:30:00.000000Z"
+    }
+}
+```
+
+### 14. Create New Information
+
+**POST** `/information`
+
+Create new information (Admin only).
+
+**Headers:**
+
+```
+Content-Type: multipart/form-data
+```
+
+**Request Body:**
+
+```json
+{
+    "title": "Cara Membuat KTP",
+    "description": "Panduan lengkap untuk membuat KTP baru",
+    "laporan_type_id": 1,
+    "attachment": [file1, file2] // Optional files (PDF, DOC, DOCX, JPG, JPEG, PNG)
+}
+```
+
+**Response (201):**
+
+```json
+{
+    "success": true,
+    "message": "Information created successfully",
+    "data": {
+        "id": 1,
+        "title": "Cara Membuat KTP",
+        "description": "Panduan lengkap untuk membuat KTP baru",
+        "laporan_type": {
+            "id": 1,
+            "name": "KTP"
+        },
+        "attachment": [
+            {
+                "filename": "template-ktp.pdf",
+                "url": "http://localhost:8000/storage/information-attachments/template-ktp.pdf",
+                "path": "information-attachments/template-ktp.pdf"
+            }
+        ],
+        "created_at": "2024-01-15T10:30:00.000000Z",
+        "updated_at": "2024-01-15T10:30:00.000000Z"
+    }
+}
+```
+
+### 15. Update Information
+
+**PUT** `/information/{id}`
+
+Update existing information (Admin only).
+
+**Headers:**
+
+```
+Content-Type: multipart/form-data
+```
+
+**Request Body:**
+
+```json
+{
+    "title": "Cara Membuat KTP - Updated",
+    "description": "Panduan lengkap untuk membuat KTP baru (diperbarui)",
+    "laporan_type_id": 1,
+    "attachment": [file1, file2] // Optional files (PDF, DOC, DOCX, JPG, JPEG, PNG)
+}
+```
+
+**Response (200):**
+
+```json
+{
+    "success": true,
+    "message": "Information updated successfully",
+    "data": {
+        "id": 1,
+        "title": "Cara Membuat KTP - Updated",
+        "description": "Panduan lengkap untuk membuat KTP baru (diperbarui)",
+        "laporan_type": {
+            "id": 1,
+            "name": "KTP"
+        },
+        "attachment": [
+            {
+                "filename": "template-ktp-updated.pdf",
+                "url": "http://localhost:8000/storage/information-attachments/template-ktp-updated.pdf",
+                "path": "information-attachments/template-ktp-updated.pdf"
+            }
+        ],
+        "created_at": "2024-01-15T10:30:00.000000Z",
+        "updated_at": "2024-01-15T10:35:00.000000Z"
+    }
+}
+```
+
+### 16. Delete Information
+
+**DELETE** `/information/{id}`
+
+Delete information (Admin only).
+
+**Response (200):**
+
+```json
+{
+    "success": true,
+    "message": "Information deleted successfully"
+}
+```
+
+### 17. Get Information by Laporan Type
+
+**GET** `/information/laporan-type/{laporanTypeId}`
+
+Get all information for a specific laporan type.
+
+**Response (200):**
+
+```json
+{
+    "success": true,
+    "message": "Information retrieved successfully",
+    "data": [
+        {
+            "id": 1,
+            "title": "Cara Membuat KTP",
+            "description": "Panduan lengkap untuk membuat KTP baru",
+            "laporan_type": {
+                "id": 1,
+                "name": "KTP"
+            },
+            "attachment": [
+                {
+                    "filename": "template-ktp.pdf",
+                    "url": "http://localhost:8000/storage/information-attachments/template-ktp.pdf",
+                    "path": "information-attachments/template-ktp.pdf"
+                }
+            ],
+            "created_at": "2024-01-15T10:30:00.000000Z",
+            "updated_at": "2024-01-15T10:30:00.000000Z"
+        }
+    ]
+}
+```
+
 ## Error Responses
 
 ### Validation Error (422)
@@ -521,6 +753,54 @@ curl -X POST http://localhost:8000/api/refresh \
   -H "Authorization: Bearer {your_token_here}"
 ```
 
+**Get All Information:**
+
+```bash
+curl -X GET "http://localhost:8000/api/information?laporan_type_id=1&search=KTP" \
+  -H "Content-Type: application/json"
+```
+
+**Get Specific Information:**
+
+```bash
+curl -X GET http://localhost:8000/api/information/1 \
+  -H "Content-Type: application/json"
+```
+
+**Create New Information:**
+
+```bash
+curl -X POST http://localhost:8000/api/information \
+  -F "title=Cara Membuat KTP" \
+  -F "description=Panduan lengkap untuk membuat KTP baru" \
+  -F "laporan_type_id=1" \
+  -F "attachment[]=@/path/to/template-ktp.pdf" \
+  -F "attachment[]=@/path/to/example-form.pdf"
+```
+
+**Update Information:**
+
+```bash
+curl -X PUT http://localhost:8000/api/information/1 \
+  -F "title=Cara Membuat KTP - Updated" \
+  -F "description=Panduan lengkap untuk membuat KTP baru (diperbarui)" \
+  -F "laporan_type_id=1" \
+  -F "attachment[]=@/path/to/updated-template.pdf"
+```
+
+**Delete Information:**
+
+```bash
+curl -X DELETE http://localhost:8000/api/information/1
+```
+
+**Get Information by Laporan Type:**
+
+```bash
+curl -X GET http://localhost:8000/api/information/laporan-type/1 \
+  -H "Content-Type: application/json"
+```
+
 ### Using JavaScript/Fetch
 
 **Login:**
@@ -613,6 +893,113 @@ if (data.success) {
 }
 ```
 
+**Get All Information:**
+
+```javascript
+const response = await fetch(
+    "http://localhost:8000/api/information?laporan_type_id=1&search=KTP",
+    {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }
+);
+
+const data = await response.json();
+console.log(data.data);
+```
+
+**Get Specific Information:**
+
+```javascript
+const response = await fetch("http://localhost:8000/api/information/1", {
+    method: "GET",
+    headers: {
+        "Content-Type": "application/json",
+    },
+});
+
+const data = await response.json();
+console.log(data.data);
+```
+
+**Create New Information:**
+
+```javascript
+const formData = new FormData();
+
+formData.append("title", "Cara Membuat KTP");
+formData.append("description", "Panduan lengkap untuk membuat KTP baru");
+formData.append("laporan_type_id", "1");
+
+// Add files if any
+const fileInput = document.getElementById("informationFileInput");
+for (let file of fileInput.files) {
+    formData.append("attachment[]", file);
+}
+
+const response = await fetch("http://localhost:8000/api/information", {
+    method: "POST",
+    body: formData,
+});
+
+const data = await response.json();
+console.log(data.data);
+```
+
+**Update Information:**
+
+```javascript
+const formData = new FormData();
+
+formData.append("title", "Cara Membuat KTP - Updated");
+formData.append("description", "Panduan lengkap untuk membuat KTP baru (diperbarui)");
+formData.append("laporan_type_id", "1");
+
+// Add files if any
+const fileInput = document.getElementById("informationFileInput");
+for (let file of fileInput.files) {
+    formData.append("attachment[]", file);
+}
+
+const response = await fetch("http://localhost:8000/api/information/1", {
+    method: "PUT",
+    body: formData,
+});
+
+const data = await response.json();
+console.log(data.data);
+```
+
+**Delete Information:**
+
+```javascript
+const response = await fetch("http://localhost:8000/api/information/1", {
+    method: "DELETE",
+    headers: {
+        "Content-Type": "application/json",
+    },
+});
+
+const data = await response.json();
+console.log(data.message);
+```
+
+**Get Information by Laporan Type:**
+
+```javascript
+const response = await fetch("http://localhost:8000/api/information/laporan-type/1", {
+    method: "GET",
+    headers: {
+        "Content-Type": "application/json",
+    },
+});
+
+const data = await response.json();
+console.log(data.data);
+```
+
 ## Notes
 
 -   All responses follow a consistent format with `success`, `message`, and `data` fields
@@ -622,5 +1009,9 @@ if (data.success) {
 -   Users are automatically assigned the "warga" role upon registration
 -   Users can only access their own request data
 -   File uploads are supported for request attachments (max 5MB per file)
--   Pagination is available for request listing
--   Filtering by status and type is supported
+-   Information endpoints support multiple file uploads (max 10MB per file, up to 5 files)
+-   Supported file types for information attachments: PDF, DOC, DOCX, JPG, JPEG, PNG
+-   Pagination is available for request and information listing
+-   Filtering by status and type is supported for requests
+-   Filtering by laporan type and search by title is supported for information
+-   Information endpoints are publicly accessible (no authentication required for read operations)

@@ -82,7 +82,7 @@ class ViewUserRequest extends ViewRecord
                                             })
                                             ->formatStateUsing(fn($state) => match ($state) {
                                                 'onprocess' => 'Sedang Diproses',
-                                                'accepted' => 'Diterima',
+                                                'accepted' => 'Selesai',
                                                 'rejected' => 'Ditolak',
                                                 default => $state,
                                             }),
@@ -119,6 +119,7 @@ class ViewUserRequest extends ViewRecord
                 ->label('Selesai')
                 ->icon('heroicon-o-check-circle')
                 ->color('success')
+                ->outlined()
                 ->form([
                     Forms\Components\Textarea::make('return_message')
                         ->label('Pesan Balasan')
@@ -139,6 +140,7 @@ class ViewUserRequest extends ViewRecord
                 ->label('Tolak')
                 ->icon('heroicon-o-x-circle')
                 ->color('danger')
+                ->outlined()
                 ->form([
                     Forms\Components\Textarea::make('return_message')
                         ->label('Pesan Balasan')

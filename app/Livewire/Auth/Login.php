@@ -24,7 +24,7 @@ class Login extends BaseAuth
     protected function getLoginFormComponent(): Component
     {
         return TextInput::make('login')
-            ->label('Phone Number or Email')
+            ->label('Nomor Telepon atau Email')
             ->required()
             ->autocomplete()
             ->autofocus()
@@ -36,9 +36,9 @@ class Login extends BaseAuth
                 'max:255',
             ])
             ->validationMessages([
-                'required' => 'Phone number or email is required.',
-                'min' => 'Phone number or email must be at least 3 characters.',
-                'max' => 'Phone number or email cannot exceed 255 characters.',
+                'required' => 'Nomor telepon atau email wajib diisi.',
+                'min' => 'Nomor telepon atau email minimal 3 karakter.',
+                'max' => 'Nomor telepon atau email maksimal 255 karakter.',
             ]);
     }
 

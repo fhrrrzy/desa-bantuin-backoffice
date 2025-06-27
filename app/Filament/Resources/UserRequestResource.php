@@ -90,6 +90,7 @@ class UserRequestResource extends Resource
                     ->required()
                     ->prefixIcon('heroicon-o-clock'),
                 Forms\Components\Textarea::make('return_message')
+                    ->label('Pesan Balasan')
                     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('lampiran')
                     ->label('Lampiran')
@@ -139,7 +140,7 @@ class UserRequestResource extends Resource
                     }),
                 Tables\Columns\TextColumn::make('lampiran')
                     ->label('Lampiran')
-                    ->formatStateUsing(fn($state) => $state ? count($state) . ' file(s)' : 'Tidak ada')
+                    ->formatStateUsing(fn($state) => $state ? count($state) . ' file' : 'Tidak ada')
                     ->badge()
                     ->color(fn($state) => $state ? 'info' : 'gray'),
                 Tables\Columns\TextColumn::make('created_at')

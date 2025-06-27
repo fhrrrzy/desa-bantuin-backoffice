@@ -21,31 +21,35 @@ class InformationResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
-    protected static ?string $navigationLabel = 'Information';
+    protected static ?string $navigationLabel = 'Informasi';
 
-    protected static ?string $modelLabel = 'Information';
+    protected static ?string $modelLabel = 'Informasi';
 
-    protected static ?string $pluralModelLabel = 'Information';
+    protected static ?string $pluralModelLabel = 'Informasi';
+
+    protected static ?string $navigationGroup = 'Layanan Desa';
+
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Select::make('laporan_type_id')
-                    ->label('Laporan Type')
+                    ->label('Jenis Laporan')
                     ->options(LaporanType::all()->pluck('name', 'id'))
                     ->required()
                     ->prefixIcon('heroicon-o-document-text')
                     ->searchable(),
 
                 Forms\Components\TextInput::make('title')
-                    ->label('Title')
+                    ->label('Judul')
                     ->required()
                     ->prefixIcon('heroicon-o-document-text')
                     ->maxLength(255),
 
                 Forms\Components\RichEditor::make('description')
-                    ->label('Description')
+                    ->label('Deskripsi')
                     ->required()
                     ->columnSpanFull(),
             ]);
@@ -56,35 +60,37 @@ class InformationResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('laporanType.name')
-                    ->label('Laporan Type')
+                    ->label('Jenis Laporan')
                     ->sortable()
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('title')
-                    ->label('Title')
+                    ->label('Judul')
                     ->searchable()
                     ->limit(50),
 
                 Tables\Columns\TextColumn::make('description')
-                    ->label('Description')
+                    ->label('Deskripsi')
                     ->html()
                     ->limit(100),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('Created At')
+                    ->label('Dibuat Pada')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->label('Updated At')
+                    ->label('Diperbarui Pada')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('laporan_type_id')
-                    ->label('Filter by Laporan Type')
+                    ->label('Filter berdasarkan Jenis Laporan')
+                    ->native(false)
+                    ->searchable()
                     ->options(LaporanType::all()->pluck('name', 'id')),
             ])
             ->actions([
@@ -92,9 +98,9 @@ class InformationResource extends Resource
                     Tables\Actions\EditAction::make()->slideOver(),
                     Tables\Actions\DeleteAction::make(),
                 ])
-                    ->label('Actions')
+                    ->label('Aksi')
                     ->icon('heroicon-o-cog-6-tooth')
-                    ->tooltip('Actions')
+                    ->tooltip('Aksi')
                     ->button()
                     ->color('gray')
                     ->outlined(),

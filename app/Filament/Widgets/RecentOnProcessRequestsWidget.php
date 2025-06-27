@@ -57,7 +57,7 @@ class RecentOnProcessRequestsWidget extends BaseWidget
 
                 Tables\Columns\TextColumn::make('lampiran')
                     ->label('Lampiran')
-                    ->formatStateUsing(fn($state) => $state ? count($state) . ' file(s)' : 'Tidak ada')
+                    ->formatStateUsing(fn($state) => $state ? count($state) . ' file' : 'Tidak ada')
                     ->badge()
                     ->color(fn($state) => $state ? 'info' : 'gray'),
             ])

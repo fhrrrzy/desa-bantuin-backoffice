@@ -1,0 +1,13 @@
+// resources/css/filament/tailwind.config.js
+import preset from '../../../vendor/filament/filament/tailwind.config.preset' // Changed to 3 dots
+
+export default {
+    presets: [preset],
+    content: [
+        './app/Filament/**/*.php',
+        './resources/views/filament/**/*.blade.php',
+        './vendor/filament/**/*.blade.php',
+        './vendor/diogogpinto/filament-auth-ui-enhancer/resources/**/*.blade.php',
+        './vendor/jaysontemporas/page-bookmarks/resources/**/*.blade.php',
+    ],
+}

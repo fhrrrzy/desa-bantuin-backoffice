@@ -7,7 +7,6 @@ use Spatie\Activitylog\LogOptions;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use JaysonTemporas\PageBookmarks\Traits\HasBookmarks;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Jeffgreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
@@ -16,7 +15,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasBookmarks, TwoFactorAuthenticatable, LogsActivity, HasApiTokens;
+    use HasFactory, Notifiable,TwoFactorAuthenticatable, LogsActivity, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.

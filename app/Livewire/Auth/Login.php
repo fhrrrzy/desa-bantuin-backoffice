@@ -3,13 +3,16 @@
 namespace App\Livewire\Auth;
 
 use Filament\Forms\Form;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Component;
+use Filament\Forms\Components\TextInput;
 use Filament\Pages\Auth\Login as BaseAuth;
 use Illuminate\Validation\ValidationException;
+use DiogoGPinto\AuthUIEnhancer\Pages\Auth\Concerns\HasCustomLayout;
 
 class Login extends BaseAuth
 {
+    use HasCustomLayout;
+
     public function form(Form $form): Form
     {
         return $form

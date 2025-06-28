@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserRequestController;
 use App\Http\Controllers\Api\InformationController;
+use App\Http\Controllers\Api\LaporanTypeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,8 +21,7 @@ use App\Http\Controllers\Api\InformationController;
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-
-
+Route::get('/laporan-types', [LaporanTypeController::class, 'index']);
 
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {

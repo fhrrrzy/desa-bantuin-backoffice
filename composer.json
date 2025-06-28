@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.2",
         "charrafimed/global-search-modal": "^3.7",
+        "diogogpinto/filament-auth-ui-enhancer": "^1.0",
         "filament/filament": "^3.3",
         "hasnayeen/themes": "^3.0",
         "jaysontemporas/page-bookmarks": "^1.0",
@@ -16,6 +17,7 @@
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
+        "marcelweidum/filament-expiration-notice": "^1.0",
         "pxlrbt/filament-activity-log": "^1.1",
         "rmsramos/activitylog": "^1.0"
     },

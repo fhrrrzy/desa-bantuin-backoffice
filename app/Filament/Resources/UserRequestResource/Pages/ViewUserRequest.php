@@ -13,6 +13,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\Grid;
 use Filament\Support\Enums\FontWeight;
+use Filament\Notifications\Notification;
 
 class ViewUserRequest extends ViewRecord
 {
@@ -133,7 +134,10 @@ class ViewUserRequest extends ViewRecord
                         'return_message' => $data['return_message'] ?? null,
                     ]);
 
-                    $this->notify('success', 'Permintaan berhasil diselesaikan.');
+                    Notification::make()
+                        ->title('Permintaan berhasil diselesaikan.')
+                        ->success()
+                        ->send();
                 });
 
             $actions[] = Actions\Action::make('tolak')
@@ -154,7 +158,10 @@ class ViewUserRequest extends ViewRecord
                         'return_message' => $data['return_message'] ?? null,
                     ]);
 
-                    $this->notify('success', 'Permintaan berhasil ditolak.');
+                    Notification::make()
+                        ->title('Permintaan berhasil ditolak.')
+                        ->success()
+                        ->send();
                 });
         }
 

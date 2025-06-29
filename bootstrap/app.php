@@ -18,6 +18,11 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Configure trusted proxies
         $middleware->trustProxies('*');
+
+        // Configure CORS for API routes
+        $middleware->group('api', [
+            \Illuminate\Http\Middleware\HandleCors::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

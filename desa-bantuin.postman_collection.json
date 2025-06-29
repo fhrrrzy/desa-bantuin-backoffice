@@ -1,0 +1,11 @@
+{
+  "info": {
+    "_postman_id": "desa-bantuin-api-collection",
+    "name": "Desa Bantuin API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "API collection for Desa Bantuin, including authentication, user requests, and information endpoints."
+  },
+  "item": [
+  ]
+}
+// The full endpoints and example requests/responses will be filled in the next step. 

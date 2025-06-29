@@ -1,0 +1,10 @@
+openapi: 3.0.3
+info:
+  title: Desa Bantuin API
+  version: 1.0.0
+  description: |
+    API documentation for Desa Bantuin, including authentication, user requests, and information endpoints.
+servers:
+  - url: http://localhost:8000/api
+paths:
+  # Endpoints will be filled in below 

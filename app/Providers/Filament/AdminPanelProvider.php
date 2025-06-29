@@ -15,7 +15,6 @@ use Rmsramos\Activitylog\ActivitylogPlugin;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Filament\Http\Middleware\AuthenticateSession;
-use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -71,7 +70,6 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->theme(asset('css/filament/theme.css'))
             ->plugins([
                 BreezyCore::make()
                     ->myProfile(
@@ -88,12 +86,7 @@ class AdminPanelProvider extends PanelProvider
                 GlobalSearchModalPlugin::make(),
             ActivitylogPlugin::make(),  
             \Hasnayeen\Themes\ThemesPlugin::make(),
-            AuthUIEnhancerPlugin::make()
-                ->showEmptyPanelOnMobile(false)
-                ->formPanelPosition('right')
-                ->formPanelWidth('40%')
-                ->emptyPanelBackgroundImageOpacity('70%')
-                ->emptyPanelBackgroundImageUrl('https://images.unsplash.com/photo-1562240020-ce31ccb0fa7d?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
+
         ]);
     }
 }

@@ -9,6 +9,7 @@ use Filament\Widgets\TableWidget as BaseWidget;
 use Filament\Tables\Actions\Action;
 use Filament\Forms;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Notifications\Notification;
 
 class RecentOnProcessRequestsWidget extends BaseWidget
 {
@@ -85,7 +86,10 @@ class RecentOnProcessRequestsWidget extends BaseWidget
                             'return_message' => $data['return_message'] ?? null,
                         ]);
 
-                        $this->notify('success', 'Permintaan berhasil diselesaikan.');
+                        Notification::make()
+                            ->title('Permintaan berhasil diselesaikan.')
+                            ->success()
+                            ->send();
                     }),
 
                 Action::make('tolak')
@@ -105,7 +109,10 @@ class RecentOnProcessRequestsWidget extends BaseWidget
                             'return_message' => $data['return_message'] ?? null,
                         ]);
 
-                        $this->notify('success', 'Permintaan berhasil ditolak.');
+                        Notification::make()
+                            ->title('Permintaan berhasil ditolak.')
+                            ->success()
+                            ->send();
                     }),
             ])
             ->paginated(false)

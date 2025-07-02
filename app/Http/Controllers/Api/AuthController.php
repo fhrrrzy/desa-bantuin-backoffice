@@ -52,7 +52,7 @@ class AuthController extends Controller
                 'role' => 'warga', // Default role for registration
             ]);
 
-            $token = $user->createToken('auth_token')->plainTextToken;
+            $token = $user->createToken('auth_token', ['*'], now()->addYears(2))->plainTextToken;
 
             return response()->json([
                 'success' => true,
@@ -122,7 +122,7 @@ class AuthController extends Controller
             $user->tokens()->delete();
 
             // Create new token
-            $token = $user->createToken('auth_token')->plainTextToken;
+            $token = $user->createToken('auth_token', ['*'], now()->addYears(2))->plainTextToken;
 
             return response()->json([
                 'success' => true,
@@ -335,7 +335,7 @@ class AuthController extends Controller
             $request->user()->currentAccessToken()->delete();
 
             // Create new token
-            $token = $user->createToken('auth_token')->plainTextToken;
+            $token = $user->createToken('auth_token', ['*'], now()->addYears(2))->plainTextToken;
 
             return response()->json([
                 'success' => true,

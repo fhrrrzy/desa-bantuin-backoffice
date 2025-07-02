@@ -46,6 +46,7 @@ class UserRequestController extends Controller
                         'id' => $request->laporanType->id,
                         'name' => $request->laporanType->name,
                     ],
+                    'title' => $request->title,
                     'type' => $request->type,
                     'description' => $request->description,
                     'status' => $request->status,
@@ -110,6 +111,7 @@ class UserRequestController extends Controller
                             'id' => $userRequest->laporanType->id,
                             'name' => $userRequest->laporanType->name,
                         ],
+                        'title' => $userRequest->title,
                         'type' => $userRequest->type,
                         'description' => $userRequest->description,
                         'status' => $userRequest->status,
@@ -136,6 +138,7 @@ class UserRequestController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'laporan_type_id' => 'required|exists:laporan_types,id',
+            'title' => 'required|string|max:255',
             'type' => 'required|in:permintaan,pelaporan',
             'description' => 'required|string',
             'lampiran' => 'nullable|array',
@@ -143,6 +146,9 @@ class UserRequestController extends Controller
         ], [
             'laporan_type_id.required' => 'Jenis laporan wajib dipilih',
             'laporan_type_id.exists' => 'Jenis laporan tidak valid',
+            'title.required' => 'Judul wajib diisi',
+            'title.string' => 'Judul harus berupa teks',
+            'title.max' => 'Judul maksimal 255 karakter',
             'type.required' => 'Tipe permintaan wajib dipilih',
             'type.in' => 'Tipe permintaan harus permintaan atau pelaporan',
             'description.required' => 'Deskripsi wajib diisi',
@@ -179,6 +185,7 @@ class UserRequestController extends Controller
                 'description' => $request->description,
                 'status' => 'onprocess',
                 'lampiran' => $lampiran,
+                'title' => $request->title,
             ]);
 
             $userRequest->load('laporanType');
@@ -193,6 +200,7 @@ class UserRequestController extends Controller
                             'id' => $userRequest->laporanType->id,
                             'name' => $userRequest->laporanType->name,
                         ],
+                        'title' => $userRequest->title,
                         'type' => $userRequest->type,
                         'description' => $userRequest->description,
                         'status' => $userRequest->status,

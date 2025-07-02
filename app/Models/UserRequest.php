@@ -27,6 +27,7 @@ class UserRequest extends Model
     protected $fillable = [
         'user_id',
         'laporan_type_id',
+        'title',
         'type',
         'description',
         'status',
@@ -62,6 +63,6 @@ class UserRequest extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['user_id', 'laporan_type_id', 'type', 'description', 'status', 'return_message', 'lampiran']);
+            ->logOnly(['user_id', 'laporan_type_id', 'title', 'type', 'description', 'status', 'return_message', 'lampiran']);
     }
 }

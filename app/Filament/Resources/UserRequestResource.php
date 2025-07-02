@@ -47,7 +47,7 @@ class UserRequestResource extends Resource
 
     public static function getGlobalSearchResultTitle(Model $record): string
     {
-        return "{$record->user->name} - {$record->type} ({$record->status})";
+        return $record->title;
     }
 
     public static function getGlobalSearchEloquentQuery(): Builder
@@ -72,7 +72,11 @@ class UserRequestResource extends Resource
         
         return $form
             ->schema([
-                // Only show user selection for admin users
+                Forms\Components\TextInput::make('title')
+                    ->label('Judul')
+                    ->required()
+                    ->maxLength(255)
+                    ->placeholder('Contoh: Permintaan KTP Baru'),
                 Forms\Components\Select::make('user_id')
                     ->label('Pilih Pengguna')
                     ->relationship('user', 'name', modifyQueryUsing: fn (Builder $query) => $query->where('role', 'warga'))
@@ -138,13 +142,18 @@ class UserRequestResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('title')
+                    ->label('Judul')
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Nama Pengguna')
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('laporanType.name')
                     ->label('Jenis Laporan')
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('type')
                     ->label('Tipe')
                     ->color(fn(string $state): string => match ($state) {
@@ -156,7 +165,8 @@ class UserRequestResource extends Resource
 
                 Tables\Columns\TextColumn::make('description')
                     ->label('Deskripsi')
-                    ->limit(50),
+                    ->html()
+                    ->limit(100),
                 Tables\Columns\TextColumn::make('status')
                     ->label('Status')
                     ->badge()

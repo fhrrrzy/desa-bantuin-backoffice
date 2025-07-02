@@ -302,6 +302,7 @@ Authorization: Bearer {token}
                     "id": 1,
                     "name": "KTP"
                 },
+                "title": "Permintaan KTP Baru",
                 "type": "permintaan",
                 "description": "Saya ingin mengajukan pembuatan KTP baru",
                 "status": "onprocess",
@@ -348,6 +349,7 @@ Authorization: Bearer {token}
                 "id": 1,
                 "name": "KTP"
             },
+            "title": "Permintaan KTP Baru",
             "type": "permintaan",
             "description": "Saya ingin mengajukan pembuatan KTP baru",
             "status": "onprocess",
@@ -378,6 +380,7 @@ Content-Type: multipart/form-data
 ```json
 {
     "laporan_type_id": 1,
+    "title": "Permintaan KTP Baru",
     "type": "permintaan",
     "description": "Saya ingin mengajukan pembuatan KTP baru",
     "lampiran": [file1, file2] // Optional files
@@ -397,6 +400,7 @@ Content-Type: multipart/form-data
                 "id": 1,
                 "name": "KTP"
             },
+            "title": "Permintaan KTP Baru",
             "type": "permintaan",
             "description": "Saya ingin mengajukan pembuatan KTP baru",
             "status": "onprocess",

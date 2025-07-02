@@ -30,6 +30,7 @@ class UserRequestSeeder extends Seeder
                 'type' => 'permintaan',
                 'status' => 'onprocess',
                 'laporan_type_name' => 'KTP',
+                'title' => 'Permintaan KTP Baru',
             ],
             [
                 'description' => 'KTP saya hilang saat perjalanan, mohon bantuan untuk pembuatan KTP pengganti.',
@@ -37,6 +38,7 @@ class UserRequestSeeder extends Seeder
                 'status' => 'accepted',
                 'return_message' => 'KTP pengganti sudah siap diambil di kantor desa.',
                 'laporan_type_name' => 'KTP',
+                'title' => 'Permintaan KTP Pengganti',
             ],
             [
                 'description' => 'Melaporkan kehilangan KTP untuk keperluan administrasi.',
@@ -44,6 +46,7 @@ class UserRequestSeeder extends Seeder
                 'status' => 'rejected',
                 'return_message' => 'Dokumen pendukung tidak lengkap, silakan lengkapi terlebih dahulu.',
                 'laporan_type_name' => 'KTP',
+                'title' => 'Laporan Kehilangan KTP',
             ],
 
             // KK Requests
@@ -52,6 +55,7 @@ class UserRequestSeeder extends Seeder
                 'type' => 'permintaan',
                 'status' => 'onprocess',
                 'laporan_type_name' => 'KK',
+                'title' => 'Permintaan KK Baru',
             ],
             [
                 'description' => 'KK rusak terkena air, mohon bantuan untuk pembuatan KK baru.',
@@ -59,6 +63,7 @@ class UserRequestSeeder extends Seeder
                 'status' => 'accepted',
                 'return_message' => 'KK baru sudah siap diambil.',
                 'laporan_type_name' => 'KK',
+                'title' => 'Permintaan KK Baru',
             ],
 
             // Buku Nikah Requests
@@ -67,6 +72,7 @@ class UserRequestSeeder extends Seeder
                 'type' => 'permintaan',
                 'status' => 'onprocess',
                 'laporan_type_name' => 'Buku Nikah',
+                'title' => 'Permintaan Buku Nikah',
             ],
             [
                 'description' => 'Buku nikah hilang, mohon bantuan untuk pembuatan buku nikah pengganti.',
@@ -74,6 +80,7 @@ class UserRequestSeeder extends Seeder
                 'status' => 'accepted',
                 'return_message' => 'Buku nikah pengganti sudah siap diambil.',
                 'laporan_type_name' => 'Buku Nikah',
+                'title' => 'Laporan Kehilangan Buku Nikah',
             ],
 
             // Akta Lahir Requests
@@ -82,6 +89,7 @@ class UserRequestSeeder extends Seeder
                 'type' => 'permintaan',
                 'status' => 'onprocess',
                 'laporan_type_name' => 'Akta Lahir',
+                'title' => 'Permintaan Akta Lahir',
             ],
             [
                 'description' => 'Akta lahir anak rusak, mohon bantuan untuk pembuatan akta lahir baru.',
@@ -89,6 +97,7 @@ class UserRequestSeeder extends Seeder
                 'status' => 'rejected',
                 'return_message' => 'Dokumen kelahiran tidak lengkap, silakan lengkapi terlebih dahulu.',
                 'laporan_type_name' => 'Akta Lahir',
+                'title' => 'Laporan Kehilangan Akta Lahir',
             ],
 
             // Surat Kematian Requests
@@ -98,6 +107,7 @@ class UserRequestSeeder extends Seeder
                 'status' => 'accepted',
                 'return_message' => 'Surat kematian sudah siap diambil.',
                 'laporan_type_name' => 'Surat Kematian',
+                'title' => 'Permintaan Surat Kematian',
             ],
 
             // KIA Requests
@@ -106,6 +116,7 @@ class UserRequestSeeder extends Seeder
                 'type' => 'permintaan',
                 'status' => 'onprocess',
                 'laporan_type_name' => 'KIA (Kartu identitas anak)',
+                'title' => 'Permintaan KIA',
             ],
 
             // KIS Requests
@@ -115,12 +126,14 @@ class UserRequestSeeder extends Seeder
                 'status' => 'accepted',
                 'return_message' => 'KIS sudah siap diambil.',
                 'laporan_type_name' => 'KIS (Kartu Indonesia Sehat)',
+                'title' => 'Permintaan KIS',
             ],
             [
                 'description' => 'KIS hilang, mohon bantuan untuk pembuatan KIS pengganti.',
                 'type' => 'pelaporan',
                 'status' => 'onprocess',
                 'laporan_type_name' => 'KIS (Kartu Indonesia Sehat)',
+                'title' => 'Laporan Kehilangan KIS',
             ],
         ];
 
@@ -139,6 +152,7 @@ class UserRequestSeeder extends Seeder
                 'status' => $requestData['status'],
                 'return_message' => $requestData['return_message'] ?? null,
                 'lampiran' => null, // No attachments for sample data
+                'title' => $requestData['title'],
             ]);
         }
 

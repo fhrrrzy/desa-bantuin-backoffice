@@ -10,7 +10,7 @@ http://localhost:8000/api
 
 ### 1. Register User
 
-**POST** `/register`
+**POST** `/api/register`
 
 Register a new user with phone number authentication.
 
@@ -48,7 +48,7 @@ Register a new user with phone number authentication.
 
 ### 2. Login with Phone Number
 
-**POST** `/login`
+**POST** `/api/login`
 
 Login using phone number and password.
 
@@ -83,7 +83,7 @@ Login using phone number and password.
 
 ### 3. Get User Profile
 
-**GET** `/profile`
+**GET** `/api/profile`
 
 Get authenticated user's profile information.
 
@@ -114,7 +114,7 @@ Authorization: Bearer {token}
 
 ### 4. Update User Profile
 
-**PUT** `/profile`
+**PUT** `/api/profile`
 
 Update authenticated user's profile information.
 
@@ -155,7 +155,7 @@ Authorization: Bearer {token}
 
 ### 5. Change Password
 
-**POST** `/change-password`
+**POST** `/api/change-password`
 
 Change user's password.
 
@@ -186,7 +186,7 @@ Authorization: Bearer {token}
 
 ### 6. Refresh Token
 
-**POST** `/refresh`
+**POST** `/api/refresh`
 
 Refresh the current access token.
 
@@ -218,7 +218,7 @@ Authorization: Bearer {token}
 
 ### 7. Logout
 
-**POST** `/logout`
+**POST** `/api/logout`
 
 Logout user and revoke all tokens.
 
@@ -241,7 +241,7 @@ Authorization: Bearer {token}
 
 ### 8. Get User's Requests
 
-**GET** `/requests`
+**GET** `/api/requests`
 
 Get authenticated user's requests with pagination and filtering.
 
@@ -294,7 +294,7 @@ Authorization: Bearer {token}
 
 ### 9. Get Specific Request
 
-**GET** `/requests/{id}`
+**GET** `/api/requests/{id}`
 
 Get a specific request by ID (only if it belongs to the authenticated user).
 
@@ -331,7 +331,7 @@ Authorization: Bearer {token}
 
 ### 10. Create New Request
 
-**POST** `/requests`
+**POST** `/api/requests`
 
 Create a new user request.
 
@@ -379,7 +379,7 @@ Content-Type: multipart/form-data
 
 ### 11. Get Request Statistics
 
-**GET** `/requests/statistics`
+**GET** `/api/requests/statistics`
 
 Get statistics for authenticated user's requests.
 
@@ -412,7 +412,7 @@ Authorization: Bearer {token}
 
 ### 12. Get All Information
 
-**GET** `/information`
+**GET** `/api/information`
 
 Get all information with pagination and filtering.
 
@@ -459,7 +459,7 @@ Get all information with pagination and filtering.
 
 ### 13. Get Specific Information
 
-**GET** `/information/{id}`
+**GET** `/api/information/{id}`
 
 Get a specific information by ID.
 
@@ -490,124 +490,15 @@ Get a specific information by ID.
 }
 ```
 
-### 14. Create New Information
 
-**POST** `/information`
 
-Create new information (Admin only).
 
-**Headers:**
 
-```
-Content-Type: multipart/form-data
-```
 
-**Request Body:**
 
-```json
-{
-    "title": "Cara Membuat KTP",
-    "description": "Panduan lengkap untuk membuat KTP baru",
-    "laporan_type_id": 1,
-    "attachment": [file1, file2] // Optional files (PDF, DOC, DOCX, JPG, JPEG, PNG)
-}
-```
+### 14. Get Information by Laporan Type
 
-**Response (201):**
-
-```json
-{
-    "success": true,
-    "message": "Information created successfully",
-    "data": {
-        "id": 1,
-        "title": "Cara Membuat KTP",
-        "description": "Panduan lengkap untuk membuat KTP baru",
-        "laporan_type": {
-            "id": 1,
-            "name": "KTP"
-        },
-        "attachment": [
-            {
-                "filename": "template-ktp.pdf",
-                "url": "http://localhost:8000/storage/information-attachments/template-ktp.pdf",
-                "path": "information-attachments/template-ktp.pdf"
-            }
-        ],
-        "created_at": "2024-01-15T10:30:00.000000Z",
-        "updated_at": "2024-01-15T10:30:00.000000Z"
-    }
-}
-```
-
-### 15. Update Information
-
-**PUT** `/information/{id}`
-
-Update existing information (Admin only).
-
-**Headers:**
-
-```
-Content-Type: multipart/form-data
-```
-
-**Request Body:**
-
-```json
-{
-    "title": "Cara Membuat KTP - Updated",
-    "description": "Panduan lengkap untuk membuat KTP baru (diperbarui)",
-    "laporan_type_id": 1,
-    "attachment": [file1, file2] // Optional files (PDF, DOC, DOCX, JPG, JPEG, PNG)
-}
-```
-
-**Response (200):**
-
-```json
-{
-    "success": true,
-    "message": "Information updated successfully",
-    "data": {
-        "id": 1,
-        "title": "Cara Membuat KTP - Updated",
-        "description": "Panduan lengkap untuk membuat KTP baru (diperbarui)",
-        "laporan_type": {
-            "id": 1,
-            "name": "KTP"
-        },
-        "attachment": [
-            {
-                "filename": "template-ktp-updated.pdf",
-                "url": "http://localhost:8000/storage/information-attachments/template-ktp-updated.pdf",
-                "path": "information-attachments/template-ktp-updated.pdf"
-            }
-        ],
-        "created_at": "2024-01-15T10:30:00.000000Z",
-        "updated_at": "2024-01-15T10:35:00.000000Z"
-    }
-}
-```
-
-### 16. Delete Information
-
-**DELETE** `/information/{id}`
-
-Delete information (Admin only).
-
-**Response (200):**
-
-```json
-{
-    "success": true,
-    "message": "Information deleted successfully"
-}
-```
-
-### 17. Get Information by Laporan Type
-
-**GET** `/information/laporan-type/{laporanTypeId}`
+**GET** `/api/information/laporan-type/{laporanTypeId}`
 
 Get all information for a specific laporan type.
 
@@ -767,32 +658,11 @@ curl -X GET http://localhost:8000/api/information/1 \
   -H "Content-Type: application/json"
 ```
 
-**Create New Information:**
 
-```bash
-curl -X POST http://localhost:8000/api/information \
-  -F "title=Cara Membuat KTP" \
-  -F "description=Panduan lengkap untuk membuat KTP baru" \
-  -F "laporan_type_id=1" \
-  -F "attachment[]=@/path/to/template-ktp.pdf" \
-  -F "attachment[]=@/path/to/example-form.pdf"
-```
 
-**Update Information:**
 
-```bash
-curl -X PUT http://localhost:8000/api/information/1 \
-  -F "title=Cara Membuat KTP - Updated" \
-  -F "description=Panduan lengkap untuk membuat KTP baru (diperbarui)" \
-  -F "laporan_type_id=1" \
-  -F "attachment[]=@/path/to/updated-template.pdf"
-```
 
-**Delete Information:**
 
-```bash
-curl -X DELETE http://localhost:8000/api/information/1
-```
 
 **Get Information by Laporan Type:**
 
@@ -924,67 +794,11 @@ const data = await response.json();
 console.log(data.data);
 ```
 
-**Create New Information:**
 
-```javascript
-const formData = new FormData();
 
-formData.append("title", "Cara Membuat KTP");
-formData.append("description", "Panduan lengkap untuk membuat KTP baru");
-formData.append("laporan_type_id", "1");
 
-// Add files if any
-const fileInput = document.getElementById("informationFileInput");
-for (let file of fileInput.files) {
-    formData.append("attachment[]", file);
-}
 
-const response = await fetch("http://localhost:8000/api/information", {
-    method: "POST",
-    body: formData,
-});
 
-const data = await response.json();
-console.log(data.data);
-```
-
-**Update Information:**
-
-```javascript
-const formData = new FormData();
-
-formData.append("title", "Cara Membuat KTP - Updated");
-formData.append("description", "Panduan lengkap untuk membuat KTP baru (diperbarui)");
-formData.append("laporan_type_id", "1");
-
-// Add files if any
-const fileInput = document.getElementById("informationFileInput");
-for (let file of fileInput.files) {
-    formData.append("attachment[]", file);
-}
-
-const response = await fetch("http://localhost:8000/api/information/1", {
-    method: "PUT",
-    body: formData,
-});
-
-const data = await response.json();
-console.log(data.data);
-```
-
-**Delete Information:**
-
-```javascript
-const response = await fetch("http://localhost:8000/api/information/1", {
-    method: "DELETE",
-    headers: {
-        "Content-Type": "application/json",
-    },
-});
-
-const data = await response.json();
-console.log(data.message);
-```
 
 **Get Information by Laporan Type:**
 
@@ -1015,6 +829,7 @@ console.log(data.data);
 -   Filtering by status and type is supported for requests
 -   Filtering by laporan type and search by title is supported for information
 -   Information endpoints are publicly accessible (no authentication required for read operations)
+-   This API is designed specifically for warga (citizens) - admin functionality is handled through the web interface
 
 ## Seeded Test Users
 
@@ -1026,7 +841,4 @@ The following users are available for testing after running the database seeders
 - **Siti Nurhaliza**: `081234567893` / `password123`
 - **Budi Santoso**: `081234567894` / `password123`
 
-### Admin User
-- **Administrator**: `081234567890` / `admin123`
-
-**Note**: The authentication API is specifically designed for mobile users with "warga" role. Admin users cannot access these endpoints.
+**Note**: This API is specifically designed for mobile users with "warga" role. Admin functionality is handled through the web interface.

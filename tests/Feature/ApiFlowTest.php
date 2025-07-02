@@ -23,6 +23,7 @@ class ApiFlowTest extends TestCase
         
         // Seed the test database
         $this->seed([
+            \Database\Seeders\UserSeeder::class,
             \Database\Seeders\LaporanTypeSeeder::class,
             \Database\Seeders\InformationSeeder::class,
         ]);
@@ -30,17 +31,42 @@ class ApiFlowTest extends TestCase
 
     public function test_full_api_flow()
     {
-        // Step 1: Register a new user
-        $this->info('Step 1: Registering new user...');
-        $userData = [
-            'name' => 'Test User',
-            'email' => 'testuser@example.com',
-            'phone_number' => '081234567890',
+        // Step 1: Login with seeded warga user
+        $this->info('Step 1: Logging in with seeded warga user...');
+        $loginData = [
+            'phone_number' => '081234567891',
+            'password' => 'warga123',
+        ];
+
+        $response = $this->postJson('/api/login', $loginData);
+        
+        if ($response->status() !== 200) {
+            $this->fail('Login failed: ' . $response->content());
+        }
+        
+        $this->assertEquals(200, $response->status());
+        $this->assertArrayHasKey('data', $response->json());
+        $this->assertArrayHasKey('user', $response->json('data'));
+        $this->assertArrayHasKey('token', $response->json('data'));
+        
+        // Verify the user has 'warga' role
+        $userData = $response->json('data.user');
+        $this->assertEquals('warga', $userData['role'], 'User should have warga role');
+        
+        $token = $response->json('data.token');
+        $this->info('Login successful with role: ' . $userData['role'] . '. Token: ' . substr($token, 0, 20) . '...');
+
+        // Step 2: Test registration with new user
+        $this->info('Step 2: Testing registration with new user...');
+        $registerData = [
+            'name' => 'Ahmad Supriadi',
+            'email' => 'ahmad@example.com',
+            'phone_number' => '081234567892',
             'password' => 'password123',
             'password_confirmation' => 'password123',
         ];
 
-        $response = $this->postJson('/api/register', $userData);
+        $response = $this->postJson('/api/register', $registerData);
         
         if ($response->status() !== 201) {
             $this->fail('User registration failed: ' . $response->content());
@@ -52,31 +78,10 @@ class ApiFlowTest extends TestCase
         $this->assertArrayHasKey('token', $response->json('data'));
         
         // Verify the user gets 'warga' role by default
-        $userData = $response->json('data.user');
-        $this->assertEquals('warga', $userData['role'], 'User should get warga role by default');
+        $newUserData = $response->json('data.user');
+        $this->assertEquals('warga', $newUserData['role'], 'User should get warga role by default');
         
-        $token = $response->json('data.token');
-        $this->info('User registered successfully with role: ' . $userData['role'] . '. Token: ' . substr($token, 0, 20) . '...');
-
-        // Step 2: Login with the registered user
-        $this->info('Step 2: Logging in...');
-        $loginData = [
-            'phone_number' => '081234567890',
-            'password' => 'password123',
-        ];
-
-        $response = $this->postJson('/api/login', $loginData);
-        
-        if ($response->status() !== 200) {
-            $this->fail('Login failed: ' . $response->content());
-        }
-        
-        $this->assertEquals(200, $response->status());
-        $this->assertArrayHasKey('data', $response->json());
-        $this->assertArrayHasKey('token', $response->json('data'));
-        
-        $token = $response->json('data.token');
-        $this->info('Login successful. Token: ' . substr($token, 0, 20) . '...');
+        $this->info('User registration successful with role: ' . $newUserData['role']);
 
         // Step 3: Get Laporan Types
         $this->info('Step 3: Getting laporan types...');
@@ -119,10 +124,9 @@ class ApiFlowTest extends TestCase
         $file = UploadedFile::fake()->create('document.pdf', 100);
         
         $requestData = [
-            'title' => 'Test Request',
-            'description' => 'This is a test request',
-            'type' => 'permintaan',
             'laporan_type_id' => $laporanType->id,
+            'type' => 'permintaan',
+            'description' => 'This is a test request',
             'lampiran' => [ $file ],
         ];
 
@@ -137,7 +141,7 @@ class ApiFlowTest extends TestCase
         
         $this->assertEquals(201, $response->status());
         $this->assertArrayHasKey('data', $response->json());
-        $this->info('User request created successfully. ID: ' . $response->json('data.id'));
+        $this->info('User request created successfully. ID: ' . $response->json('data.request.id'));
 
         // Step 6: Get User Requests
         $this->info('Step 6: Getting user requests...');
@@ -152,7 +156,7 @@ class ApiFlowTest extends TestCase
         
         $this->assertEquals(200, $response->status());
         $this->assertArrayHasKey('data', $response->json());
-        $this->info('User requests retrieved successfully. Count: ' . count($response->json('data')));
+        $this->info('User requests retrieved successfully. Count: ' . count($response->json('data.requests')));
 
         // Step 7: Get Profile
         $this->info('Step 7: Getting user profile...');
@@ -167,7 +171,7 @@ class ApiFlowTest extends TestCase
         
         $this->assertEquals(200, $response->status());
         $this->assertArrayHasKey('data', $response->json());
-        $this->info('Profile retrieved successfully. Name: ' . $response->json('data.name'));
+        $this->info('Profile retrieved successfully. Name: ' . $response->json('data.user.name'));
 
         // Step 8: Get Statistics
         $this->info('Step 8: Getting statistics...');
@@ -203,13 +207,19 @@ class ApiFlowTest extends TestCase
 
     public function test_information_endpoint_specifically()
     {
-        // Create a user and authenticate
-        $user = User::factory()->create([
-            'email' => 'test@example.com',
+        // Login with seeded warga user
+        $loginData = [
             'phone_number' => '081234567891',
-        ]);
+            'password' => 'warga123',
+        ];
 
-        $token = $user->createToken('test-token')->plainTextToken;
+        $response = $this->postJson('/api/login', $loginData);
+        
+        if ($response->status() !== 200) {
+            $this->fail('Login failed: ' . $response->content());
+        }
+        
+        $token = $response->json('data.token');
 
         // Test information endpoint specifically
         $this->info('Testing information endpoint specifically...');

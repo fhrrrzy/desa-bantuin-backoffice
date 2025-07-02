@@ -12,21 +12,21 @@ BASE_URL="http://127.0.0.1:8001/api"
 curl -X POST "$BASE_URL/register" \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "Test User",
-    "email": "testuser@example.com",
-    "phone_number": "081234567890",
+    "name": "Ahmad Supriadi",
+    "email": "ahmad@example.com",
+    "phone_number": "081234567892",
     "password": "password123",
     "password_confirmation": "password123"
   }'
 ```
 
-## 2. User Login
+## 2. User Login (Using Seeded Warga User)
 ```bash
 curl -X POST "$BASE_URL/login" \
   -H "Content-Type: application/json" \
   -d '{
-    "phone_number": "081234567890",
-    "password": "password123"
+    "phone_number": "081234567891",
+    "password": "warga123"
   }'
 ```
 
@@ -175,4 +175,19 @@ You can also run the comprehensive test script:
 - Replace placeholder values like `{token}`, `{laporan_type_id}`, etc. with actual values
 - The script will automatically handle token extraction and reuse
 - All responses are formatted with `jq` if available, otherwise raw JSON is displayed
-- File uploads require actual files to exist at the specified paths 
+- File uploads require actual files to exist at the specified paths
+
+## Seeded Test Users
+
+The following users are available for testing after running the database seeders:
+
+### Warga Users (Mobile App Users)
+- **Warga Test**: `081234567891` / `warga123` (Recommended for testing)
+- **Ahmad Supriadi**: `081234567892` / `password123`
+- **Siti Nurhaliza**: `081234567893` / `password123`
+- **Budi Santoso**: `081234567894` / `password123`
+
+### Admin User
+- **Administrator**: `081234567890` / `admin123`
+
+**Note**: The authentication API is specifically designed for mobile users with "warga" role. Admin users cannot access these endpoints. 

@@ -18,9 +18,9 @@ Register a new user with phone number authentication.
 
 ```json
 {
-    "name": "John Doe",
-    "email": "john@example.com",
-    "phone_number": "081234567890",
+    "name": "Ahmad Supriadi",
+    "email": "ahmad@example.com",
+    "phone_number": "081234567892",
     "password": "password123",
     "password_confirmation": "password123"
 }
@@ -35,9 +35,9 @@ Register a new user with phone number authentication.
     "data": {
         "user": {
             "id": 1,
-            "name": "John Doe",
-            "email": "john@example.com",
-            "phone_number": "081234567890",
+            "name": "Ahmad Supriadi",
+            "email": "ahmad@example.com",
+            "phone_number": "081234567892",
             "role": "warga"
         },
         "token": "1|abc123...",
@@ -56,8 +56,8 @@ Login using phone number and password.
 
 ```json
 {
-    "phone_number": "081234567890",
-    "password": "password123"
+    "phone_number": "081234567891",
+    "password": "warga123"
 }
 ```
 
@@ -69,10 +69,10 @@ Login using phone number and password.
     "message": "Login berhasil",
     "data": {
         "user": {
-            "id": 1,
-            "name": "John Doe",
-            "email": "john@example.com",
-            "phone_number": "081234567890",
+            "id": 2,
+            "name": "Warga Test",
+            "email": "warga@desa-bantuin.com",
+            "phone_number": "081234567891",
             "role": "warga"
         },
         "token": "2|def456...",
@@ -101,10 +101,10 @@ Authorization: Bearer {token}
     "message": "Data profil berhasil diambil",
     "data": {
         "user": {
-            "id": 1,
-            "name": "John Doe",
-            "email": "john@example.com",
-            "phone_number": "081234567890",
+            "id": 2,
+            "name": "Warga Test",
+            "email": "warga@desa-bantuin.com",
+            "phone_number": "081234567891",
             "role": "warga",
             "avatar_url": null
         }
@@ -128,9 +128,9 @@ Authorization: Bearer {token}
 
 ```json
 {
-    "name": "John Updated",
-    "email": "john.updated@example.com",
-    "phone_number": "081234567891"
+    "name": "Warga Test Updated",
+    "email": "warga.updated@desa-bantuin.com",
+    "phone_number": "081234567895"
 }
 ```
 
@@ -142,10 +142,10 @@ Authorization: Bearer {token}
     "message": "Profil berhasil diperbarui",
     "data": {
         "user": {
-            "id": 1,
-            "name": "John Updated",
-            "email": "john.updated@example.com",
-            "phone_number": "081234567891",
+            "id": 2,
+            "name": "Warga Test Updated",
+            "email": "warga.updated@desa-bantuin.com",
+            "phone_number": "081234567895",
             "role": "warga",
             "avatar_url": null
         }
@@ -204,10 +204,10 @@ Authorization: Bearer {token}
     "message": "Token berhasil diperbarui",
     "data": {
         "user": {
-            "id": 1,
-            "name": "John Doe",
-            "email": "john@example.com",
-            "phone_number": "081234567890",
+            "id": 2,
+            "name": "Warga Test",
+            "email": "warga@desa-bantuin.com",
+            "phone_number": "081234567891",
             "role": "warga"
         },
         "token": "3|ghi789...",
@@ -701,9 +701,9 @@ Get all information for a specific laporan type.
 curl -X POST http://localhost:8000/api/register \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "John Doe",
-    "email": "john@example.com",
-    "phone_number": "081234567890",
+    "name": "Ahmad Supriadi",
+    "email": "ahmad@example.com",
+    "phone_number": "081234567892",
     "password": "password123",
     "password_confirmation": "password123"
   }'
@@ -715,8 +715,8 @@ curl -X POST http://localhost:8000/api/register \
 curl -X POST http://localhost:8000/api/login \
   -H "Content-Type: application/json" \
   -d '{
-    "phone_number": "081234567890",
-    "password": "password123"
+    "phone_number": "081234567891",
+    "password": "warga123"
   }'
 ```
 
@@ -812,8 +812,8 @@ const response = await fetch("http://localhost:8000/api/login", {
         "Content-Type": "application/json",
     },
     body: JSON.stringify({
-        phone_number: "081234567890",
-        password: "password123",
+        phone_number: "081234567891",
+        password: "warga123",
     }),
 });
 
@@ -1015,3 +1015,18 @@ console.log(data.data);
 -   Filtering by status and type is supported for requests
 -   Filtering by laporan type and search by title is supported for information
 -   Information endpoints are publicly accessible (no authentication required for read operations)
+
+## Seeded Test Users
+
+The following users are available for testing after running the database seeders:
+
+### Warga Users (Mobile App Users)
+- **Warga Test**: `081234567891` / `warga123`
+- **Ahmad Supriadi**: `081234567892` / `password123`
+- **Siti Nurhaliza**: `081234567893` / `password123`
+- **Budi Santoso**: `081234567894` / `password123`
+
+### Admin User
+- **Administrator**: `081234567890` / `admin123`
+
+**Note**: The authentication API is specifically designed for mobile users with "warga" role. Admin users cannot access these endpoints.

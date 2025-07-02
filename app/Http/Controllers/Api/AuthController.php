@@ -79,7 +79,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Login with phone number
+     * Login with phone number (Mobile - Warga only)
      */
     public function login(Request $request): JsonResponse
     {
@@ -108,6 +108,14 @@ class AuthController extends Controller
                     'success' => false,
                     'message' => 'Nomor telepon atau kata sandi salah'
                 ], 401);
+            }
+
+            // Check if user is warga (mobile user)
+            if ($user->role !== 'warga') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Akses ditolak. Hanya untuk pengguna mobile (warga).'
+                ], 403);
             }
 
             // Revoke existing tokens
@@ -141,12 +149,20 @@ class AuthController extends Controller
     }
 
     /**
-     * Get authenticated user profile
+     * Get authenticated user profile (Mobile - Warga only)
      */
     public function profile(Request $request): JsonResponse
     {
         try {
             $user = $request->user();
+
+            // Check if user is warga (mobile user)
+            if ($user->role !== 'warga') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Akses ditolak. Hanya untuk pengguna mobile (warga).'
+                ], 403);
+            }
 
             return response()->json([
                 'success' => true,
@@ -172,11 +188,19 @@ class AuthController extends Controller
     }
 
     /**
-     * Update user profile
+     * Update user profile (Mobile - Warga only)
      */
     public function updateProfile(Request $request): JsonResponse
     {
         $user = $request->user();
+
+        // Check if user is warga (mobile user)
+        if ($user->role !== 'warga') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Akses ditolak. Hanya untuk pengguna mobile (warga).'
+            ], 403);
+        }
 
         $validator = Validator::make($request->all(), [
             'name' => 'sometimes|string|max:255',
@@ -224,10 +248,20 @@ class AuthController extends Controller
     }
 
     /**
-     * Change password
+     * Change password (Mobile - Warga only)
      */
     public function changePassword(Request $request): JsonResponse
     {
+        $user = $request->user();
+
+        // Check if user is warga (mobile user)
+        if ($user->role !== 'warga') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Akses ditolak. Hanya untuk pengguna mobile (warga).'
+            ], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'current_password' => 'required|string',
             'new_password' => 'required|string|min:8|confirmed',
@@ -247,8 +281,6 @@ class AuthController extends Controller
         }
 
         try {
-            $user = $request->user();
-
             if (!Hash::check($request->current_password, $user->password)) {
                 return response()->json([
                     'success' => false,
@@ -277,7 +309,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Refresh user token
+     * Refresh user token (Mobile - Warga only)
      */
     public function refresh(Request $request): JsonResponse
     {
@@ -289,6 +321,14 @@ class AuthController extends Controller
                     'success' => false,
                     'message' => 'Token tidak valid'
                 ], 401);
+            }
+
+            // Check if user is warga (mobile user)
+            if ($user->role !== 'warga') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Akses ditolak. Hanya untuk pengguna mobile (warga).'
+                ], 403);
             }
 
             // Revoke current token
@@ -322,12 +362,22 @@ class AuthController extends Controller
     }
 
     /**
-     * Logout user
+     * Logout user (Mobile - Warga only)
      */
     public function logout(Request $request): JsonResponse
     {
         try {
-            $request->user()->tokens()->delete();
+            $user = $request->user();
+
+            // Check if user is warga (mobile user)
+            if ($user->role !== 'warga') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Akses ditolak. Hanya untuk pengguna mobile (warga).'
+                ], 403);
+            }
+
+            $user->tokens()->delete();
 
             return response()->json([
                 'success' => true,

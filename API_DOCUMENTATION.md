@@ -237,9 +237,40 @@ Authorization: Bearer {token}
 }
 ```
 
+## Laporan Type Endpoints
+
+### 8. Get All Laporan Types
+
+**GET** `/api/laporan-types`
+
+Get all available laporan types (public endpoint).
+
+**Response (200):**
+
+```json
+{
+    "success": true,
+    "message": "Laporan types retrieved successfully",
+    "data": [
+        {
+            "id": 1,
+            "name": "KTP",
+            "created_at": "2024-01-15T10:30:00.000000Z",
+            "updated_at": "2024-01-15T10:30:00.000000Z"
+        },
+        {
+            "id": 2,
+            "name": "KK",
+            "created_at": "2024-01-15T10:30:00.000000Z",
+            "updated_at": "2024-01-15T10:30:00.000000Z"
+        }
+    ]
+}
+```
+
 ## User Request Endpoints
 
-### 8. Get User's Requests
+### 9. Get User's Requests
 
 **GET** `/api/requests`
 
@@ -292,7 +323,7 @@ Authorization: Bearer {token}
 }
 ```
 
-### 9. Get Specific Request
+### 10. Get Specific Request
 
 **GET** `/api/requests/{id}`
 
@@ -329,7 +360,7 @@ Authorization: Bearer {token}
 }
 ```
 
-### 10. Create New Request
+### 11. Create New Request
 
 **POST** `/api/requests`
 
@@ -377,7 +408,7 @@ Content-Type: multipart/form-data
 }
 ```
 
-### 11. Get Request Statistics
+### 12. Get Request Statistics
 
 **GET** `/api/requests/statistics`
 
@@ -410,7 +441,7 @@ Authorization: Bearer {token}
 
 ## Information Endpoints
 
-### 12. Get All Information
+### 13. Get All Information
 
 **GET** `/api/information`
 
@@ -457,7 +488,7 @@ Get all information with pagination and filtering.
 }
 ```
 
-### 13. Get Specific Information
+### 14. Get Specific Information
 
 **GET** `/api/information/{id}`
 
@@ -490,13 +521,7 @@ Get a specific information by ID.
 }
 ```
 
-
-
-
-
-
-
-### 14. Get Information by Laporan Type
+### 15. Get Information by Laporan Type
 
 **GET** `/api/information/laporan-type/{laporanTypeId}`
 
@@ -658,12 +683,6 @@ curl -X GET http://localhost:8000/api/information/1 \
   -H "Content-Type: application/json"
 ```
 
-
-
-
-
-
-
 **Get Information by Laporan Type:**
 
 ```bash
@@ -793,12 +812,6 @@ const response = await fetch("http://localhost:8000/api/information/1", {
 const data = await response.json();
 console.log(data.data);
 ```
-
-
-
-
-
-
 
 **Get Information by Laporan Type:**
 

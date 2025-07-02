@@ -32,6 +32,12 @@ class RecentOnProcessRequestsWidget extends BaseWidget
                     ->searchable()
                     ->sortable(),
 
+                Tables\Columns\TextColumn::make('title')
+                    ->label('Judul')
+                    ->searchable()
+                    ->sortable()
+                    ->limit(30),
+
                 Tables\Columns\TextColumn::make('laporanType.name')
                     ->label('Jenis Laporan')
                     ->sortable(),

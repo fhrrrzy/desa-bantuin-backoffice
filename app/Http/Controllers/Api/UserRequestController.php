@@ -60,7 +60,17 @@ class UserRequestController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Data permintaan berhasil diambil',
-                'data' => $requests
+                'data' => [
+                    'requests' => $requests->items(),
+                    'pagination' => [
+                        'current_page' => $requests->currentPage(),
+                        'last_page' => $requests->lastPage(),
+                        'per_page' => $requests->perPage(),
+                        'total' => $requests->total(),
+                        'from' => $requests->firstItem(),
+                        'to' => $requests->lastItem(),
+                    ]
+                ]
             ], 200);
         } catch (\Exception $e) {
             return response()->json([

@@ -285,6 +285,7 @@ Authorization: Bearer {token}
 **Query Parameters:**
 
 -   `per_page` (optional): Number of items per page (default: 10)
+-   `page` (optional): The page number to retrieve (default: 1)
 -   `status` (optional): Filter by status (onprocess, accepted, rejected)
 -   `type` (optional): Filter by type (permintaan, pelaporan)
 
@@ -454,6 +455,7 @@ Get all information with pagination and filtering.
 **Query Parameters:**
 
 -   `per_page` (optional): Number of items per page (default: 10)
+-   `page` (optional): The page number to retrieve (default: 1)
 -   `laporan_type_id` (optional): Filter by laporan type ID
 -   `search` (optional): Search by title
 
@@ -643,7 +645,7 @@ curl -X POST http://localhost:8000/api/login \
 **Get User's Requests:**
 
 ```bash
-curl -X GET "http://localhost:8000/api/requests?status=onprocess&per_page=5" \
+curl -X GET "http://localhost:8000/api/requests?status=onprocess&per_page=5&page=2" \
   -H "Authorization: Bearer {your_token_here}"
 ```
 
@@ -723,7 +725,7 @@ localStorage.setItem("auth_token", token);
 const token = localStorage.getItem("auth_token");
 
 const response = await fetch(
-    "http://localhost:8000/api/requests?status=onprocess",
+    "http://localhost:8000/api/requests?status=onprocess&page=2",
     {
         method: "GET",
         headers: {

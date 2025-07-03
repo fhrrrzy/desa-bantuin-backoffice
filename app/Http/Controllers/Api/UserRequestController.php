@@ -175,7 +175,15 @@ class UserRequestController extends Controller
             if ($request->hasFile('lampiran')) {
                 foreach ($request->file('lampiran') as $file) {
                     if ($file && $file->isValid()) {
-                        $lampiranPaths[] = $file->store('lampiran', 'public');
+                        // Preserve original filename with extension
+                        $originalName = $file->getClientOriginalName();
+                        $extension = $file->getClientOriginalExtension();
+                        $filename = pathinfo($originalName, PATHINFO_FILENAME);
+                        
+                        // Generate unique filename while preserving extension
+                        $uniqueFilename = $filename . '_' . uniqid() . '.' . $extension;
+                        $path = $file->storeAs('lampiran', $uniqueFilename, 'public');
+                        $lampiranPaths[] = $path;
                     }
                 }
             }

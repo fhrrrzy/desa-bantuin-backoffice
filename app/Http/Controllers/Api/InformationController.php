@@ -68,7 +68,14 @@ class InformationController extends Controller
             
             if ($request->hasFile('attachment')) {
                 foreach ($request->file('attachment') as $file) {
-                    $path = $file->store('information-attachments', 'public');
+                    // Preserve original filename with extension
+                    $originalName = $file->getClientOriginalName();
+                    $extension = $file->getClientOriginalExtension();
+                    $filename = pathinfo($originalName, PATHINFO_FILENAME);
+                    
+                    // Generate unique filename while preserving extension
+                    $uniqueFilename = $filename . '_' . uniqid() . '.' . $extension;
+                    $path = $file->storeAs('information-attachments', $uniqueFilename, 'public');
                     $attachmentPaths[] = $path;
                 }
             }
@@ -134,7 +141,14 @@ class InformationController extends Controller
                 $attachmentPaths = [];
                 
                 foreach ($request->file('attachment') as $file) {
-                    $path = $file->store('information-attachments', 'public');
+                    // Preserve original filename with extension
+                    $originalName = $file->getClientOriginalName();
+                    $extension = $file->getClientOriginalExtension();
+                    $filename = pathinfo($originalName, PATHINFO_FILENAME);
+                    
+                    // Generate unique filename while preserving extension
+                    $uniqueFilename = $filename . '_' . uniqid() . '.' . $extension;
+                    $path = $file->storeAs('information-attachments', $uniqueFilename, 'public');
                     $attachmentPaths[] = $path;
                 }
                 

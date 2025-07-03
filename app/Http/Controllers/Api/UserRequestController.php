@@ -167,28 +167,21 @@ class UserRequestController extends Controller
         }
 
         try {
-            $user = $request->user();
+            $data = $validator->validated();
+            $data['user_id'] = $request->user()->id;
 
-            // Handle file uploads
-            $lampiran = [];
+            // Handle file uploads - only process valid files
+            $lampiranPaths = [];
             if ($request->hasFile('lampiran')) {
                 foreach ($request->file('lampiran') as $file) {
-                    $path = $file->store('lampiran', 'public');
-                    $lampiran[] = $path;
+                    if ($file && $file->isValid()) {
+                        $lampiranPaths[] = $file->store('lampiran', 'public');
+                    }
                 }
             }
+            $data['lampiran'] = $lampiranPaths;
 
-            $userRequest = UserRequest::create([
-                'user_id' => $user->id,
-                'laporan_type_id' => $request->laporan_type_id,
-                'type' => $request->type,
-                'description' => $request->description,
-                'status' => 'onprocess',
-                'lampiran' => $lampiran,
-                'title' => $request->title,
-            ]);
-
-            $userRequest->load('laporanType');
+            $userRequest = UserRequest::create($data);
 
             return response()->json([
                 'success' => true,
@@ -213,7 +206,7 @@ class UserRequestController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Terjadi kesalahan saat membuat permintaan',
+                'message' => 'Gagal membuat permintaan',
                 'error' => $e->getMessage()
             ], 500);
         }

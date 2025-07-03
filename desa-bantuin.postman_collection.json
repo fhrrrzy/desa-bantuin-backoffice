@@ -282,6 +282,11 @@
 									"type": "text"
 								},
 								{
+									"key": "title",
+									"value": "Permintaan KTP Baru",
+									"type": "text"
+								},
+								{
 									"key": "type",
 									"value": "permintaan",
 									"type": "text"

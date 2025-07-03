@@ -61,12 +61,6 @@ class RecentOnProcessRequestsWidget extends BaseWidget
                     ->label('Dibuat Pada')
                     ->dateTime()
                     ->sortable(),
-
-                Tables\Columns\TextColumn::make('lampiran')
-                    ->label('Lampiran')
-                    ->formatStateUsing(fn($state) => $state ? count($state) . ' file' : 'Tidak ada')
-                    ->badge()
-                    ->color(fn($state) => $state ? 'info' : 'gray'),
             ])
             ->actions([
                 Action::make('view')

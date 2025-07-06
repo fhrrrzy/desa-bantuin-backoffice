@@ -43,14 +43,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', [UserRequestController::class, 'store']);
         Route::get('/{id}', [UserRequestController::class, 'show'])->middleware('user.owns.request');
     });
+});
 
-    // Public Information routes
-    Route::prefix('information')->group(function () {
-        Route::get('/', [InformationController::class, 'index']);
-        Route::post('/', [InformationController::class, 'store']);
-        Route::get('/{information}', [InformationController::class, 'show']);
-        Route::put('/{information}', [InformationController::class, 'update']);
-        Route::delete('/{information}', [InformationController::class, 'destroy']);
-        Route::get('/laporan-type/{laporanTypeId}', [InformationController::class, 'getByLaporanType']);
-    });
+// Public Information routes
+Route::prefix('information')->group(function () {
+    Route::get('/', [InformationController::class, 'index']);
+    Route::post('/', [InformationController::class, 'store']);
+    Route::get('/{information}', [InformationController::class, 'show']);
+    Route::put('/{information}', [InformationController::class, 'update']);
+    Route::delete('/{information}', [InformationController::class, 'destroy']);
+    Route::get('/laporan-type/{laporanTypeId}', [InformationController::class, 'getByLaporanType']);
 });

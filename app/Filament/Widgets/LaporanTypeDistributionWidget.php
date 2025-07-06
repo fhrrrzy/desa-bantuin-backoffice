@@ -10,6 +10,12 @@ class LaporanTypeDistributionWidget extends ChartWidget
 {
     protected static ?string $heading = 'Distribusi Berdasarkan Jenis Laporan';
 
+    protected static ?string $description = 'Distribusi berdasarkan jenis laporan';
+
+    protected int | string | array $columnSpan = '1/2';
+
+    protected static ?int $sort = 2;
+
     protected function getData(): array
     {
         $laporanTypes = LaporanType::withCount('requests')->get();

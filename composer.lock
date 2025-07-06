@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "de51817d2c9030347be034ed7ac294ba",
+    "content-hash": "2d28cdd84542b648ff869d2c11ad355c",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -2238,56 +2238,6 @@
                 "source": "https://github.com/JayBizzle/Crawler-Detect/tree/v1.3.5"
             },
             "time": "2025-06-11T17:58:05+00:00"
-        },
-        {
-            "name": "jaysontemporas/page-bookmarks",
-            "version": "1.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jayson-temporas/page-bookmarks.git",
-                "reference": "4f903764c885374887a0e2b221d49ca067172b05"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jayson-temporas/page-bookmarks/zipball/4f903764c885374887a0e2b221d49ca067172b05",
-                "reference": "4f903764c885374887a0e2b221d49ca067172b05",
-                "shasum": ""
-            },
-            "require": {
-                "filament/filament": "^3.2",
-                "spatie/laravel-package-tools": "^1.18"
-            },
-            "require-dev": {
-                "laravel/pint": "^1.17",
-                "php": "^8.3"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Jaysontemporas\\PageBookmarks\\PageBookmarksServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Jaysontemporas\\PageBookmarks\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jayson Temporas"
-                }
-            ],
-            "support": {
-                "issues": "https://github.com/jayson-temporas/page-bookmarks/issues",
-                "source": "https://github.com/jayson-temporas/page-bookmarks/tree/v1.0.2"
-            },
-            "time": "2025-06-26T05:21:10+00:00"
         },
         {
             "name": "jeffgreco13/filament-breezy",

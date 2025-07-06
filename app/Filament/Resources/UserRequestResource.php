@@ -147,6 +147,28 @@ class UserRequestResource extends Resource
                     ->label('Judul')
                     ->searchable()
                     ->sortable(),
+
+            Tables\Columns\TextColumn::make('status')
+                ->label('Status')
+                ->badge()
+                ->icon(fn(string $state): string => match ($state) {
+                    'onprocess' => 'heroicon-o-clock',
+                    'accepted' => 'heroicon-o-check-circle',
+                    'rejected' => 'heroicon-o-x-circle',
+                    default => 'heroicon-o-question-mark-circle',
+                })
+                ->color(fn(string $state): string => match ($state) {
+                    'onprocess' => 'warning',
+                    'accepted' => 'success',
+                    'rejected' => 'danger',
+                    default => 'gray',
+                })
+                ->formatStateUsing(fn($state) => match ($state) {
+                    'onprocess' => 'Sedang Diproses',
+                    'accepted' => 'Selesai',
+                    'rejected' => 'Ditolak',
+                    default => $state,
+                }),
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Nama Pengguna')
                     ->sortable()
@@ -168,27 +190,7 @@ class UserRequestResource extends Resource
                     ->label('Deskripsi')
                     ->html()
                     ->limit(100),
-                Tables\Columns\TextColumn::make('status')
-                    ->label('Status')
-                    ->badge()
-                    ->icon(fn(string $state): string => match ($state) {
-                        'onprocess' => 'heroicon-o-clock',
-                        'accepted' => 'heroicon-o-check-circle',
-                        'rejected' => 'heroicon-o-x-circle',
-                        default => 'heroicon-o-question-mark-circle',
-                    })
-                    ->color(fn(string $state): string => match ($state) {
-                        'onprocess' => 'warning',
-                        'accepted' => 'success',
-                        'rejected' => 'danger',
-                        default => 'gray',
-                    })
-                    ->formatStateUsing(fn($state) => match ($state) {
-                        'onprocess' => 'Sedang Diproses',
-                        'accepted' => 'Selesai',
-                        'rejected' => 'Ditolak',
-                        default => $state,
-                    }),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Dibuat Pada')
                     ->dateTime()

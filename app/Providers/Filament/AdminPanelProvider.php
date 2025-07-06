@@ -42,11 +42,11 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
+                \App\Filament\Widgets\UserRequestStatsWidget::class,    
+                \App\Filament\Widgets\RecentOnProcessRequestsWidget::class,
                 \App\Filament\Widgets\UserRequestChartWidget::class,
                 \App\Filament\Widgets\RequestTypeChartWidget::class,
                 \App\Filament\Widgets\LaporanTypeDistributionWidget::class,
-                \App\Filament\Widgets\UserRequestStatsWidget::class,    
-                \App\Filament\Widgets\RecentOnProcessRequestsWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\UserRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
+use Filament\Notifications\Notification;
 
 class UserRequestController extends Controller
 {
@@ -190,6 +192,17 @@ class UserRequestController extends Controller
             $data['lampiran'] = $lampiranPaths;
 
             $userRequest = UserRequest::create($data);
+
+            // Send notification to all admin users
+            $adminUsers = User::where('role', 'admin')->get();
+            
+            foreach ($adminUsers as $adminUser) {
+                Notification::make()
+                    ->title('Permintaan Baru')
+                    ->body("Permintaan baru dari {$userRequest->user->name}: {$userRequest->title}")
+                    ->info()
+                    ->sendToDatabase($adminUser);
+            }
 
             return response()->json([
                 'success' => true,

@@ -10,6 +10,12 @@ class UserRequestChartWidget extends ChartWidget
 {
     protected static ?string $heading = 'Tren Permintaan';
 
+    protected static ?string $description = 'Tren permintaan per hari';
+
+    protected int | string | array $columnSpan = '1/2';
+
+    protected static ?int $sort = 3;
+
     protected function getData(): array
     {
         $days = collect(range(6, 0))->map(function ($day) {

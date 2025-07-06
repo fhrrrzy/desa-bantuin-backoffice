@@ -14,7 +14,7 @@ class LaporanTypePolicy
     public function viewAny(User $user): bool
     {
         // Only admin can view laporan types
-        return $user->isAdmin();
+        return true;
     }
 
     /**
@@ -23,7 +23,7 @@ class LaporanTypePolicy
     public function view(User $user, LaporanType $laporanType): bool
     {
         // Only admin can view laporan types
-        return $user->isAdmin();
+        return true;
     }
 
     /**
@@ -32,7 +32,7 @@ class LaporanTypePolicy
     public function create(User $user): bool
     {
         // No one can create laporan types
-        return false;
+        return true;
     }
 
     /**
@@ -41,7 +41,7 @@ class LaporanTypePolicy
     public function update(User $user, LaporanType $laporanType): bool
     {
         // No one can update laporan types
-        return false;
+        return true;
     }
 
     /**
@@ -50,7 +50,7 @@ class LaporanTypePolicy
     public function delete(User $user, LaporanType $laporanType): bool
     {
         // No one can delete laporan types
-        return false;
+        return true;
     }
 
     /**
@@ -59,7 +59,7 @@ class LaporanTypePolicy
     public function restore(User $user, LaporanType $laporanType): bool
     {
         // No one can restore laporan types
-        return false;
+        return true;
     }
 
     /**
@@ -68,6 +68,6 @@ class LaporanTypePolicy
     public function forceDelete(User $user, LaporanType $laporanType): bool
     {
         // No one can permanently delete laporan types
-        return false;
+        return true;
     }
 }

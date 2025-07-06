@@ -2,15 +2,19 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\LaporanTypeResource\Pages;
-use App\Models\LaporanType;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\LaporanType;
+use Filament\Resources\Resource;
+use Filament\Tables\Actions\EditAction;
 use Illuminate\Database\Eloquent\Model;
+use Filament\Tables\Actions\DeleteAction;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\DeleteBulkAction;
+use App\Filament\Resources\LaporanTypeResource\Pages;
+use Filament\Tables\Actions\ActionGroup;
 
 class LaporanTypeResource extends Resource
 {
@@ -67,16 +71,24 @@ class LaporanTypeResource extends Resource
                 //
             ])
             ->actions([
-                // No actions allowed - read-only
+                ActionGroup::make([
+                    EditAction::make()->slideOver(),
+                    DeleteAction::make(),
+                ])
+                ->label('Aksi')
+                ->icon('heroicon-o-cog-6-tooth')
+                ->tooltip('Aksi')
+                ->button()
+                ->color('gray')
+                ->outlined(),
             ])
             ->bulkActions([
-                // No bulk actions allowed - read-only
+                DeleteBulkAction::make(),
             ])
             ->emptyStateIcon('heroicon-o-document-text')
             ->emptyStateHeading('Belum ada jenis laporan')
             ->emptyStateDescription('Jenis laporan akan ditambahkan oleh sistem.')
             ->emptyStateActions([
-                // No actions allowed - read-only
             ]);
     }
 

@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources\LaporanTypeResource\Pages;
 
-use App\Filament\Resources\LaporanTypeResource;
 use Filament\Actions;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\ListRecords;
+use App\Filament\Resources\LaporanTypeResource;
+use Filament\Actions\CreateAction;
 
 class ListLaporanTypes extends ListRecords
 {
@@ -13,7 +15,7 @@ class ListLaporanTypes extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            // No create action allowed - read-only
+            CreateAction::make(),
         ];
     }
 }

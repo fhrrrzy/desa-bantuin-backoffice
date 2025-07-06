@@ -10,6 +10,12 @@ class RequestTypeChartWidget extends ChartWidget
 {
     protected static ?string $heading = 'Distribusi Jenis Permintaan';
 
+    protected static ?string $description = 'Distribusi berdasarkan jenis permintaan';
+
+    protected int | string | array $columnSpan = 'full';
+
+    protected static ?int $sort = 5;
+
     protected function getData(): array
     {
         $laporanTypes = LaporanType::withCount('requests')->get();
@@ -36,14 +42,31 @@ class RequestTypeChartWidget extends ChartWidget
                 ],
             ],
             'labels' => [
-                'Permintaan (' . $typeData['permintaan'] . ')',
-                'Pelaporan (' . $typeData['pelaporan'] . ')',
+                'Permintaan',
+                'Pelaporan',
             ],
         ];
     }
 
     protected function getType(): string
     {
-        return 'doughnut';
+        return 'bar';
+    }
+
+    protected function getOptions(): array
+    {
+        return [
+            'indexAxis' => 'y',
+            'plugins' => [
+                'legend' => [
+                    'display' => false,
+                ],
+            ],
+            'scales' => [
+                'x' => [
+                    'beginAtZero' => true,
+                ],
+            ],
+        ];
     }
 }

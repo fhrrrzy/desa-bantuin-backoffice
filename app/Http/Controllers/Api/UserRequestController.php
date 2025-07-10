@@ -13,6 +13,23 @@ use Filament\Notifications\Notification;
 class UserRequestController extends Controller
 {
     /**
+     * Transform lampiran array to array of objects with filename, url, and path
+     */
+    private function transformLampiran($lampiran)
+    {
+        if (!is_array($lampiran)) {
+            return [];
+        }
+        return array_map(function ($path) {
+            return [
+                'filename' => basename($path),
+                'url' => url('storage/' . $path),
+                'path' => $path,
+            ];
+        }, $lampiran);
+    }
+
+    /**
      * Get authenticated user's requests
      */
     public function index(Request $request): JsonResponse
@@ -53,7 +70,7 @@ class UserRequestController extends Controller
                     'description' => $request->description,
                     'status' => $request->status,
                     'return_message' => $request->return_message,
-                    'lampiran' => $request->lampiran,
+                    'lampiran' => $this->transformLampiran($request->lampiran),
                     'created_at' => $request->created_at,
                     'updated_at' => $request->updated_at,
                 ];
@@ -118,7 +135,7 @@ class UserRequestController extends Controller
                         'description' => $userRequest->description,
                         'status' => $userRequest->status,
                         'return_message' => $userRequest->return_message,
-                        'lampiran' => $userRequest->lampiran,
+                        'lampiran' => $this->transformLampiran($userRequest->lampiran),
                         'created_at' => $userRequest->created_at,
                         'updated_at' => $userRequest->updated_at,
                     ]

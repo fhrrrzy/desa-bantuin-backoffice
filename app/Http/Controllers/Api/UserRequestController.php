@@ -70,7 +70,7 @@ class UserRequestController extends Controller
                     'description' => $request->description,
                     'status' => $request->status,
                     'return_message' => $request->return_message,
-                    'lampiran' => $this->transformLampiran($request->lampiran),
+                    'attachment' => $this->transformLampiran($request->lampiran),
                     'created_at' => $request->created_at,
                     'updated_at' => $request->updated_at,
                 ];
@@ -135,7 +135,7 @@ class UserRequestController extends Controller
                         'description' => $userRequest->description,
                         'status' => $userRequest->status,
                         'return_message' => $userRequest->return_message,
-                        'lampiran' => $this->transformLampiran($userRequest->lampiran),
+                        'attachment' => $this->transformLampiran($userRequest->lampiran),
                         'created_at' => $userRequest->created_at,
                         'updated_at' => $userRequest->updated_at,
                     ]
